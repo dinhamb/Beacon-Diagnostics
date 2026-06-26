@@ -9,7 +9,8 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "encrypt-portal": "node scripts/encrypt-portal.mjs"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.1.1",
