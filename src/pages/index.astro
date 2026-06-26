@@ -1,0 +1,99 @@
+---
+/**
+ * Front gateway (Layer 3.1). Job: confirm credibility fast and route an
+ * already-warm visitor to the right track. Not a persuasion page — a
+ * confirmation-and-routing page. Centered/symmetric grid (2.3); two tracks at
+ * EQUAL visual weight. Headline is forward-safe (no "reconnecting"/prior-contact
+ * framing) so it survives being forwarded.
+ */
+import Base from '../layouts/Base.astro';
+import RoutingTile from '../components/RoutingTile.astro';
+import CalibrationGrid from '../components/CalibrationGrid.astro';
+import { TRACKS, TRACK_ORDER } from '../site.ts';
+---
+
+<Base
+  title="Beacon Diagnostics"
+  description="Beacon Diagnostics turns continuous, noisy data into discrete, verified findings — across imaging and equipment QC, and remote cardiac diagnostics."
+  navVariant="gateway"
+>
+  <!-- Hero: centered, symmetric (columns 3–10 of 12) -->
+  <section class="section gateway-hero">
+    <div class="grid-container">
+      <div class="col gateway-hero__content" style="--from:3;--to:11" data-reveal>
+        <p class="eyebrow">Diagnostics &amp; quality assurance</p>
+        <h1 class="gateway-hero__title">A finding you can stand behind.</h1>
+        <p class="gateway-hero__sub measure">
+          Beacon Diagnostics turns a continuous, noisy stream of data into a
+          discrete, trustworthy result — in imaging and equipment QC, and in
+          remote cardiac diagnostics.
+        </p>
+      </div>
+
+      <div class="col gateway-hero__motif" style="--from:3;--to:11">
+        <CalibrationGrid tone="light" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Routing: two tracks, equal weight (6/6) -->
+  <section class="section--tight gateway-route">
+    <div class="grid-container">
+      <div class="col gateway-route__lead" style="--from:3;--to:11" data-reveal>
+        <h2 class="gateway-route__h2">Choose your track</h2>
+        <p class="gateway-route__note">
+          Two ways we work — each with its own depth. Pick the one you came for.
+        </p>
+      </div>
+    </div>
+    <div class="grid-container gateway-route__tiles">
+      <div class="col" style="--from:1;--to:7" data-reveal>
+        <RoutingTile
+          href={TRACKS[TRACK_ORDER[0]].href}
+          icon={TRACKS[TRACK_ORDER[0]].icon}
+          title={TRACKS[TRACK_ORDER[0]].label}
+          blurb={TRACKS[TRACK_ORDER[0]].blurb}
+        />
+      </div>
+      <div class="col" style="--from:7;--to:13" data-reveal>
+        <RoutingTile
+          href={TRACKS[TRACK_ORDER[1]].href}
+          icon={TRACKS[TRACK_ORDER[1]].icon}
+          title={TRACKS[TRACK_ORDER[1]].label}
+          blurb={TRACKS[TRACK_ORDER[1]].blurb}
+        />
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .gateway-hero { padding-top: var(--space-9); padding-bottom: var(--space-6); }
+  .gateway-hero__content { text-align: center; }
+  .gateway-hero__title { margin-top: var(--space-4); }
+  .gateway-hero__sub {
+    margin: var(--space-5) auto 0;
+    font-size: var(--fs-lead);
+    color: var(--color-slate);
+  }
+  .gateway-hero__motif {
+    margin-top: var(--space-8);
+    /* the motif sits outside the reading path — felt, not read (3.2) */
+    opacity: 0.92;
+  }
+
+  .gateway-route { padding-bottom: var(--space-10); }
+  .gateway-route__lead { text-align: center; margin-bottom: var(--space-7); }
+  .gateway-route__note {
+    margin-top: var(--space-3);
+    color: var(--color-slate);
+    font-size: var(--fs-lead);
+  }
+  .gateway-route__tiles { row-gap: var(--gutter); }
+
+  @media (max-width: 880px) {
+    .gateway-hero__content { text-align: left; }
+    .gateway-hero__sub { margin-inline: 0; }
+    .gateway-route__lead { text-align: left; }
+  }
+</style>

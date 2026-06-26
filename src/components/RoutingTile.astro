@@ -1,0 +1,86 @@
+---
+/**
+ * RoutingTile — a gateway routing card (Layer 3.1). The two tracks are presented
+ * with EQUAL visual weight; neither subordinate. Identical structure, identical
+ * emphasis — asymmetry here would undercut the routing logic itself.
+ * The whole card is the target (a calm, confident affordance), with an arrow
+ * that nudges on hover (restraint, not bounce — 4.2).
+ */
+import Icon from './Icon.astro';
+
+interface Props {
+  href: string;
+  icon: string;
+  title: string;
+  blurb: string;
+}
+const { href, icon, title, blurb } = Astro.props;
+---
+
+<a class="tile" href={href}>
+  <span class="tile__icon" aria-hidden="true">
+    <Icon name={icon as any} size={26} stroke={1.5} />
+  </span>
+  <h2 class="tile__title">{title}</h2>
+  <p class="tile__blurb">{blurb}</p>
+  <span class="tile__cta">
+    Enter <Icon name="arrow-right" size={18} stroke={2} class="tile__arrow" />
+  </span>
+</a>
+
+<style>
+  .tile {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: var(--space-7);
+    background: var(--color-surface);
+    border: 1px solid var(--color-navy-08);
+    border-radius: var(--radius-lg);
+    text-decoration: none;
+    color: var(--color-text);
+    box-shadow: var(--shadow-1);
+    transition: transform var(--dur-press) var(--ease-resolve),
+      box-shadow var(--dur-press) var(--ease-resolve),
+      border-color var(--dur-press) var(--ease-resolve);
+  }
+  .tile:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-2);
+    border-color: var(--color-slate-30);
+  }
+
+  .tile__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    border-radius: var(--radius);
+    background: var(--color-amber-12);
+    color: var(--color-amber-deep); /* thin mark on light tint — accessible */
+    margin-bottom: var(--space-5);
+  }
+
+  .tile__title {
+    font-size: var(--fs-h3);
+    margin-bottom: var(--space-3);
+  }
+  .tile__blurb {
+    color: var(--color-slate);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    flex: 1;
+  }
+  .tile__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-6);
+    font-size: var(--fs-cta);
+    font-weight: var(--weight-medium);
+    color: var(--color-navy);
+  }
+  .tile__arrow { transition: transform var(--dur-press) var(--ease-resolve); }
+  .tile:hover .tile__arrow { transform: translateX(3px); }
+</style>
