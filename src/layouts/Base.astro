@@ -1,0 +1,103 @@
+---
+/**
+ * Base layout — <head>, self-hosted font preload (4.4), Astro view transitions
+ * for a brief page cross-dissolve (4.2), and the shared reveal-on-scroll
+ * observer. Nav + Footer chrome wrap every page.
+ */
+import { ClientRouter } from 'astro:transitions';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { SITE, type TrackId } from '../site.ts';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  navVariant?: 'gateway' | 'service';
+  activeTrack?: TrackId;
+}
+const {
+  title,
+  description,
+  navVariant = 'gateway',
+  activeTrack,
+} = Astro.props;
+const fullTitle = title.includes(SITE.name) ? title : `${title} — ${SITE.name}`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#0B2447" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <!-- Preload only the above-the-fold weights; variable files cut request count (4.4) -->
+    <link
+      rel="preload"
+      href="/fonts/inter-latin-wght-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/source-serif-4-latin-wght-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+
+    <ClientRouter />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <Nav variant={navVariant} active={activeTrack} />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+
+    <script>
+      // Shared reveal-on-scroll observer (Layer 4.2). Progressive enhancement:
+      // adds `reveal-ready` so the resting (hidden) state only applies with JS,
+      // then reveals elements as they enter view. Honors reduced-motion.
+      function initReveal() {
+        const els = document.querySelectorAll<HTMLElement>('[data-reveal]:not([data-revealed])');
+        if (!els.length) return;
+        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        document.documentElement.classList.add('reveal-ready');
+
+        if (reduce) {
+          els.forEach((el) => {
+            el.classList.add('is-visible');
+            el.dataset.revealed = 'true';
+          });
+          return;
+        }
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                (entry.target as HTMLElement).dataset.revealed = 'true';
+                io.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.18, rootMargin: '0px 0px -8% 0px' }
+        );
+        els.forEach((el) => io.observe(el));
+      }
+      initReveal();
+      document.addEventListener('astro:page-load', initReveal);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,70 @@
+---
+/**
+ * Logo lockup. NOTE: the original illustrated logo isn't in the repo yet — this
+ * is an on-brand stand-in built from the calibration/resolution metaphor (a
+ * reading locking into a tolerance ring), not the lighthouse (retired, Layer 1).
+ * Mark in Bright Amber + serif wordmark in navy. Small by default: with this
+ * pre-recognition audience the headline carries the confidence load, not a big
+ * lockup (Layer 3.1).
+ */
+interface Props {
+  tone?: 'navy' | 'light';
+  href?: string | null;
+  class?: string;
+}
+const { tone = 'navy', href = '/', class: className = '' } = Astro.props;
+const wordColor = tone === 'navy' ? 'var(--color-navy)' : '#fff';
+const subColor = tone === 'navy' ? 'var(--color-slate)' : 'var(--color-on-navy-dim)';
+const Tag = href ? 'a' : 'div';
+---
+
+<Tag class={`logo ${className}`} href={href ?? undefined} aria-label="Beacon Diagnostics — home">
+  <svg class="logo__mark" width="30" height="30" viewBox="0 0 30 30" fill="none" aria-hidden="true">
+    <!-- tolerance ring -->
+    <circle cx="15" cy="15" r="11" stroke="var(--color-slate-30, #b8c2d2)" stroke-width="1.5" />
+    <!-- the reading converging to a locked value -->
+    <path d="M15 3 v6" stroke="var(--color-amber)" stroke-width="2" stroke-linecap="round" />
+    <path d="M15 21 v6" stroke="var(--color-amber)" stroke-width="2" stroke-linecap="round" />
+    <path d="M3 15 h6" stroke="var(--color-amber)" stroke-width="2" stroke-linecap="round" />
+    <path d="M21 15 h6" stroke="var(--color-amber)" stroke-width="2" stroke-linecap="round" />
+    <circle cx="15" cy="15" r="3.25" fill="var(--color-amber)" />
+  </svg>
+  <span class="logo__word">
+    <span class="logo__name">Beacon</span>
+    <span class="logo__sub">Diagnostics</span>
+  </span>
+</Tag>
+
+<style define:vars={{ wordColor, subColor }}>
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    text-decoration: none;
+    line-height: 1;
+  }
+  .logo__mark { flex: none; }
+  .logo__word {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    font-family: var(--font-heading);
+  }
+  .logo__name {
+    font-weight: 600;
+    font-size: 1.1875rem;
+    letter-spacing: -0.01em;
+    color: var(--wordColor);
+  }
+  .logo__sub {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 0.8125rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--subColor);
+  }
+  @media (max-width: 480px) {
+    .logo__sub { display: none; } /* keep the mark + name legible on small screens */
+  }
+</style>

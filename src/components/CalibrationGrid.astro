@@ -1,0 +1,167 @@
+---
+/**
+ * CalibrationGrid — the brand's core motif (Layer 1 + 4.2):
+ * a field of scattered readings converging on one verified value inside a
+ * tolerance band. Motion's only job here is to dramatize resolution
+ * (noise -> clarity). Implemented as SVG + CSS transitions (NOT canvas/WebGL)
+ * so it's cheap on low-end mobile and never blocks the main thread (4.4).
+ *
+ * Resolves when scrolled into view (the shared reveal observer toggles
+ * `.is-visible`). Sub-400ms, eased, no overshoot. Honors reduced-motion.
+ *
+ * It sits OUTSIDE the reading path — meant to be felt peripherally, not read.
+ */
+interface Props {
+  tone?: 'light' | 'navy';
+  class?: string;
+}
+const { tone = 'light', class: className = '' } = Astro.props;
+
+// Deterministic "scatter" so the build is stable. Mulberry32 PRNG.
+function prng(seed: number) {
+  return function () {
+    seed |= 0;
+    seed = (seed + 0x6d2b79f5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+const rand = prng(7);
+
+const W = 440;
+const H = 260;
+const COUNT = 16;
+const baseline = H / 2;            // the resolved "verified value" line
+const bandHalf = 18;               // tolerance band half-height
+const leftPad = 40;
+const step = (W - leftPad * 2) / (COUNT - 1);
+
+// Each reading: a target (resolved) x/y on the baseline, and a scattered offset.
+const marks = Array.from({ length: COUNT }, (_, i) => {
+  const x = leftPad + i * step;
+  const dy = (rand() * 2 - 1) * (H / 2 - 30); // scatter across full height
+  const dx = (rand() * 2 - 1) * 10;
+  return {
+    x: +x.toFixed(2),
+    y: baseline,
+    dx: +dx.toFixed(2),
+    dy: +dy.toFixed(2),
+    delay: +(rand() * 90).toFixed(0), // small stagger, total stays sub-400ms
+  };
+});
+
+// Faint static calibration ticks along the bottom axis.
+const ticks = Array.from({ length: COUNT }, (_, i) => +(leftPad + i * step).toFixed(2));
+---
+
+<div
+  class={`cal cal--${tone} ${className}`}
+  data-reveal
+  aria-hidden="true"
+  style={`--w:${W};--h:${H}`}
+>
+  <svg viewBox={`0 0 ${W} ${H}`} width={W} height={H} preserveAspectRatio="xMidYMid meet">
+    <!-- tolerance band -->
+    <rect
+      class="band"
+      x="0"
+      y={baseline - bandHalf}
+      width={W}
+      height={bandHalf * 2}
+      rx="2"
+    />
+    <line class="band-line" x1="0" y1={baseline - bandHalf} x2={W} y2={baseline - bandHalf} />
+    <line class="band-line" x1="0" y1={baseline + bandHalf} x2={W} y2={baseline + bandHalf} />
+    <!-- the resolved value line -->
+    <line class="value-line" x1={leftPad} y1={baseline} x2={W - leftPad} y2={baseline} />
+
+    <!-- static calibration ticks -->
+    {ticks.map((tx) => (
+      <line class="tick" x1={tx} y1={H - 16} x2={tx} y2={H - 8} />
+    ))}
+
+    <!-- scattered readings that resolve onto the value line -->
+    {marks.map((m) => (
+      <circle
+        class="mark"
+        cx={m.x}
+        cy={m.y}
+        r="3"
+        style={`--dx:${m.dx}px;--dy:${m.dy}px;--d:${m.delay}ms`}
+      />
+    ))}
+  </svg>
+</div>
+
+<style>
+  .cal {
+    width: 100%;
+  }
+  .cal svg {
+    width: 100%;
+    height: auto;
+  }
+
+  /* tone: light vs on-navy palette (amber rule 2.1) */
+  .cal--light {
+    --_value: var(--color-amber-deep);
+    --_band: var(--color-navy-08);
+    --_bandline: var(--color-slate-30);
+    --_mark: var(--color-slate);
+    --_tick: var(--color-slate-20);
+  }
+  .cal--navy {
+    --_value: var(--color-amber); /* bright amber on navy */
+    --_band: rgba(255, 255, 255, 0.05);
+    --_bandline: var(--color-on-navy-line);
+    --_mark: rgba(255, 255, 255, 0.85);
+    --_tick: var(--color-on-navy-line);
+  }
+
+  .band { fill: var(--_band); }
+  .band-line {
+    stroke: var(--_bandline);
+    stroke-width: 1;
+    stroke-dasharray: 3 4;
+  }
+  .value-line {
+    stroke: var(--_value);
+    stroke-width: 1.75;
+    opacity: 0;
+    transition: opacity var(--dur-reveal) var(--ease-resolve);
+  }
+  .tick {
+    stroke: var(--_tick);
+    stroke-width: 1.25;
+  }
+
+  .mark {
+    fill: var(--_mark);
+    /* scattered resting state */
+    transform: translate(var(--dx), var(--dy));
+    opacity: 0.22;
+    transition: transform var(--dur-reveal) var(--ease-resolve),
+      opacity var(--dur-reveal) var(--ease-resolve),
+      fill var(--dur-reveal) var(--ease-resolve);
+    transition-delay: var(--d);
+  }
+
+  /* resolved: marks converge onto the value line, in tolerance */
+  .cal.is-visible .mark {
+    transform: translate(0, 0);
+    opacity: 1;
+  }
+  /* the middle few settle as the verified amber value */
+  .cal.is-visible .mark:nth-child(odd) { fill: var(--_value); }
+  .cal.is-visible .value-line { opacity: 1; transition-delay: 120ms; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mark {
+      transform: none;
+      opacity: 1;
+      transition: none;
+    }
+    .value-line { opacity: 1; }
+  }
+</style>
