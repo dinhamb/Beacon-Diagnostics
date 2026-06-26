@@ -14,7 +14,7 @@
 import Logo from './Logo.astro';
 import Icon from './Icon.astro';
 import TrackBadge from './TrackBadge.astro';
-import { SITE, TRACKS, TRACK_ORDER, type TrackId } from '../site.ts';
+import { SITE, TRACKS, TRACK_ORDER, withBase, type TrackId } from '../site.ts';
 
 interface Props {
   variant?: 'gateway' | 'service';
@@ -23,6 +23,7 @@ interface Props {
 const { variant = 'gateway', active } = Astro.props;
 const current = active ? TRACKS[active] : null;
 const contactHref = `mailto:${SITE.email}`;
+const home = withBase('/');
 ---
 
 <header class="nav" data-nav>
@@ -46,7 +47,7 @@ const contactHref = `mailto:${SITE.email}`;
     ) : (
       <div class="nav__service">
         {current && <TrackBadge icon={current.icon} label={current.label} />}
-        <a class="nav__switch" href="/">
+        <a class="nav__switch" href={home}>
           <Icon name="arrow-right" size={15} stroke={1.75} class="nav__switch-icon" />
           <span>Switch track</span>
         </a>
@@ -73,7 +74,7 @@ const contactHref = `mailto:${SITE.email}`;
         )}
         <a class="nav__mobile-link" href={TRACKS.imaging.href}>{TRACKS.imaging.navLabel}</a>
         <a class="nav__mobile-link" href={TRACKS.cardiac.href}>{TRACKS.cardiac.navLabel}</a>
-        {variant === 'service' && <a class="nav__mobile-link" href="/">All services</a>}
+        {variant === 'service' && <a class="nav__mobile-link" href={home}>All services</a>}
         <a class="nav__mobile-link nav__mobile-link--contact" href={contactHref}>
           <Icon name="mail" size={18} stroke={1.75} /> Contact
         </a>

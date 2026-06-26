@@ -7,12 +7,14 @@
  * pre-recognition audience the headline carries the confidence load, not a big
  * lockup (Layer 3.1).
  */
+import { withBase } from '../site.ts';
+
 interface Props {
   tone?: 'navy' | 'light';
   href?: string | null;
   class?: string;
 }
-const { tone = 'navy', href = '/', class: className = '' } = Astro.props;
+const { tone = 'navy', href = withBase('/'), class: className = '' } = Astro.props;
 const wordColor = tone === 'navy' ? 'var(--color-navy)' : '#fff';
 const subColor = tone === 'navy' ? 'var(--color-slate)' : 'var(--color-on-navy-dim)';
 const Tag = href ? 'a' : 'div';

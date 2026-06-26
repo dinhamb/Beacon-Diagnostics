@@ -12,6 +12,15 @@ export const SITE = {
   phone: '+1 (000) 000-0000',
 };
 
+/**
+ * Prefix an absolute app path with the configured base (import.meta.env.BASE_URL
+ * is "/" locally and "/Beacon-Diagnostics/" on GitHub Pages). Use for every
+ * internal link and asset so both deploy modes resolve correctly.
+ */
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, ''); // '' locally, '/Beacon-Diagnostics' on Pages
+export const withBase = (path: string): string =>
+  path === '/' ? `${BASE}/` : `${BASE}${path.startsWith('/') ? '' : '/'}${path}`;
+
 export type TrackId = 'imaging' | 'cardiac';
 
 export const TRACKS: Record<
@@ -22,7 +31,7 @@ export const TRACKS: Record<
     id: 'imaging',
     label: 'Imaging & equipment QC',
     navLabel: 'Imaging & equipment QC',
-    href: '/imaging-qc',
+    href: withBase('/imaging-qc'),
     icon: 'ruler', // calibration — the imaging/QC track's fixed icon (2.4)
     blurb: 'Mammography, MRI, and multi-site compliance — calibration and QC you can stand behind.',
   },
@@ -30,7 +39,7 @@ export const TRACKS: Record<
     id: 'cardiac',
     label: 'Remote diagnostics',
     navLabel: 'Remote diagnostics',
-    href: '/cardiac',
+    href: withBase('/cardiac'),
     icon: 'monitor', // broadcast/signal — NOT a heartbeat glyph (Layer 1)
     blurb: 'Holter monitoring, CIED support, and remote monitoring — clarity quicker, refer smarter.',
   },
