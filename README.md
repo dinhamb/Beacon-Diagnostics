@@ -41,7 +41,8 @@ src/
     cardiac.astro         # service page — remote/cardiac diagnostics (§3.6)
 public/
   fonts/                  # self-hosted latin variable woff2
-  favicon.svg
+  favicon.png
+  assets/                 # Beacon logo/icon PNG set + source SVG
 ```
 
 ## Design system notes (the load-bearing rules)

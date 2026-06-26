@@ -1,8 +1,8 @@
 ---
 /**
- * Logo lockup — lighthouse mark + BEACON / DIAGNOSTICS wordmark.
- * Based on the brand reference (navy disc, white lighthouse, red heart, amber
- * beam). The mark is reused (same shapes) in favicon.svg and the /qc-demo gate.
+ * Logo lockup: Beacon mark + BEACON / DIAGNOSTICS wordmark.
+ * The mark is generated from the supplied Beacon Diagnostics PNG source art and
+ * reused by the favicon and the /qc-demo gate.
  *
  * `background` controls the on-light vs on-dark palette so the lockup reads on
  * both the light page body and the navy nav/footer.
@@ -23,38 +23,23 @@ const {
 
 const onDark = background === 'dark';
 const nameColor = onDark ? '#FFFFFF' : 'var(--color-navy)';
-const subColor = onDark ? 'var(--color-amber)' : '#C42E2E'; // amber on navy / red on light
-const ring = onDark ? 'rgba(255,255,255,0.18)' : 'rgba(11,36,71,0.10)';
+const subColor = onDark ? 'var(--color-amber)' : '#C42E2E';
+const mark = withBase('/assets/beacon-mark.png');
 
 const Tag = href ? 'a' : 'div';
 ---
 
-<Tag class={`logo ${className}`} href={href ?? undefined} aria-label="Beacon Diagnostics — home">
-  <svg class="logo__mark" width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true">
-    <!-- navy disc -->
-    <circle cx="32" cy="32" r="31" fill="var(--color-navy)" />
-    <circle cx="32" cy="32" r="30.25" stroke={ring} stroke-width="1.5" />
-    <!-- beam -->
-    <path d="M34 23 L63 13 L63 31 Z" fill="var(--color-amber)" opacity="0.55" />
-    <!-- base / dock -->
-    <rect x="20" y="45.5" width="24" height="4.2" rx="1.4" fill="#FFFFFF" />
-    <!-- tower (white trapezoid) -->
-    <path d="M27.4 45.5 L36.6 45.5 L35 26 L29 26 Z" fill="#FFFFFF" />
-    <!-- navy stripes on the tower -->
-    <path d="M28.7 38 L35.3 38 L35.05 35 L28.95 35 Z" fill="var(--color-navy)" />
-    <path d="M29.25 31 L34.75 31 L34.55 29 L29.45 29 Z" fill="var(--color-navy)" opacity="0.9" />
-    <!-- gallery platform -->
-    <rect x="26.5" y="23.4" width="11" height="2.8" rx="0.8" fill="#FFFFFF" />
-    <!-- lantern room -->
-    <rect x="29" y="17.5" width="6" height="6" fill="#FFFFFF" />
-    <line x1="31" y1="17.5" x2="31" y2="23.5" stroke="var(--color-navy)" stroke-width="0.9" />
-    <line x1="33" y1="17.5" x2="33" y2="23.5" stroke="var(--color-navy)" stroke-width="0.9" />
-    <!-- roof -->
-    <path d="M27.6 17.5 L36.4 17.5 L32 11.5 Z" fill="var(--color-navy)" />
-    <circle cx="32" cy="10.4" r="1.3" fill="var(--color-amber)" />
-    <!-- heart -->
-    <path d="M32 37.2 C31 35.4 28.2 35.6 28.2 37.9 C28.2 39.4 30.2 40.6 32 42 C33.8 40.6 35.8 39.4 35.8 37.9 C35.8 35.6 33 35.4 32 37.2 Z" fill="#C42E2E" />
-  </svg>
+<Tag class={`logo ${className}`} href={href ?? undefined} aria-label="Beacon Diagnostics - home">
+  <img
+    class="logo__mark"
+    src={mark}
+    width={size}
+    height={size}
+    alt=""
+    aria-hidden="true"
+    loading="eager"
+    decoding="async"
+  />
   <span class="logo__word">
     <span class="logo__name">Beacon</span>
     <span class="logo__sub">Diagnostics</span>
@@ -69,7 +54,11 @@ const Tag = href ? 'a' : 'div';
     text-decoration: none;
     line-height: 1;
   }
-  .logo__mark { flex: none; }
+  .logo__mark {
+    flex: none;
+    display: block;
+    object-fit: contain;
+  }
   .logo__word {
     display: inline-flex;
     flex-direction: column;

@@ -97,7 +97,7 @@ function gatePage({ salt, iv, ciphertext, iterations }) {
   .card{width:100%;max-width:400px;background:rgba(255,255,255,0.98);
     border-radius:14px;padding:36px 32px;box-shadow:0 18px 50px rgba(0,0,0,0.28)}
   .mark{display:flex;align-items:center;gap:10px;margin-bottom:22px}
-  .mark svg{flex:none}
+  .mark img{flex:none;display:block;object-fit:contain}
   .mark span{font-family:var(--serif);font-weight:600;font-size:19px;color:var(--navy);letter-spacing:-0.01em}
   h1{font-family:var(--serif);font-weight:600;font-size:24px;color:var(--navy);
     margin:0 0 6px;letter-spacing:-0.01em}
@@ -119,18 +119,7 @@ function gatePage({ salt, iv, ciphertext, iterations }) {
 <body>
   <main class="card" role="main">
     <div class="mark" aria-hidden="true">
-      <svg width="30" height="30" viewBox="0 0 64 64" fill="none">
-        <circle cx="32" cy="32" r="31" fill="#0B2447"/>
-        <path d="M34 23 L60 14 L60 30 Z" fill="#D4A017" opacity="0.55"/>
-        <rect x="21" y="45.5" width="22" height="4.2" rx="1.4" fill="#fff"/>
-        <path d="M27.4 45.5 L36.6 45.5 L35 26 L29 26 Z" fill="#fff"/>
-        <path d="M28.7 38 L35.3 38 L35.05 35 L28.95 35 Z" fill="#0B2447"/>
-        <rect x="26.5" y="23.4" width="11" height="2.8" rx="0.8" fill="#fff"/>
-        <rect x="29" y="17.5" width="6" height="6" fill="#fff"/>
-        <path d="M27.6 17.5 L36.4 17.5 L32 11.5 Z" fill="#0B2447"/>
-        <circle cx="32" cy="10.4" r="1.3" fill="#D4A017"/>
-        <path d="M32 37.2 C31 35.4 28.2 35.6 28.2 37.9 C28.2 39.4 30.2 40.6 32 42 C33.8 40.6 35.8 39.4 35.8 37.9 C35.8 35.6 33 35.4 32 37.2 Z" fill="#C42E2E"/>
-      </svg>
+      <img src="../assets/beacon-mark.png" width="30" height="30" alt="" />
       <span>Beacon Diagnostics</span>
     </div>
     <h1>Restricted area</h1>
