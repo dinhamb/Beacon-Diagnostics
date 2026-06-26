@@ -119,10 +119,17 @@ function gatePage({ salt, iv, ciphertext, iterations }) {
 <body>
   <main class="card" role="main">
     <div class="mark" aria-hidden="true">
-      <svg width="28" height="28" viewBox="0 0 30 30" fill="none">
-        <circle cx="15" cy="15" r="11" stroke="#c9d2e0" stroke-width="1.5"/>
-        <path d="M15 3v6M15 21v6M3 15h6M21 15h6" stroke="#D4A017" stroke-width="2" stroke-linecap="round"/>
-        <circle cx="15" cy="15" r="3.25" fill="#D4A017"/>
+      <svg width="30" height="30" viewBox="0 0 64 64" fill="none">
+        <circle cx="32" cy="32" r="31" fill="#0B2447"/>
+        <path d="M34 23 L60 14 L60 30 Z" fill="#D4A017" opacity="0.55"/>
+        <rect x="21" y="45.5" width="22" height="4.2" rx="1.4" fill="#fff"/>
+        <path d="M27.4 45.5 L36.6 45.5 L35 26 L29 26 Z" fill="#fff"/>
+        <path d="M28.7 38 L35.3 38 L35.05 35 L28.95 35 Z" fill="#0B2447"/>
+        <rect x="26.5" y="23.4" width="11" height="2.8" rx="0.8" fill="#fff"/>
+        <rect x="29" y="17.5" width="6" height="6" fill="#fff"/>
+        <path d="M27.6 17.5 L36.4 17.5 L32 11.5 Z" fill="#0B2447"/>
+        <circle cx="32" cy="10.4" r="1.3" fill="#D4A017"/>
+        <path d="M32 37.2 C31 35.4 28.2 35.6 28.2 37.9 C28.2 39.4 30.2 40.6 32 42 C33.8 40.6 35.8 39.4 35.8 37.9 C35.8 35.6 33 35.4 32 37.2 Z" fill="#C42E2E"/>
       </svg>
       <span>Beacon Diagnostics</span>
     </div>

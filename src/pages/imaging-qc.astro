@@ -41,8 +41,8 @@ const statusMeta = {
   navVariant="service"
   activeTrack="imaging"
 >
-  <!-- 1. HERO — content 1–7, visual 8–12 -->
-  <section class="section hero">
+  <!-- 1. HERO — navy panel; content 1–7, visual 8–12 -->
+  <section class="section hero panel-navy">
     <div class="grid-container hero__grid">
       <div class="col hero__content" style="--from:1;--to:8" data-reveal>
         <p class="eyebrow"><Icon name={TRACKS.imaging.icon} size={16} stroke={1.75} /> Imaging &amp; equipment QC</p>
@@ -58,14 +58,16 @@ const statusMeta = {
           <Button href={contactHref} variant="primary">Talk to us about your program</Button>
           <!-- proof stats sit on the CTA baseline — numbers build confidence faster (3.2) -->
           <div class="hero__stats">
-            <Stat value={100} suffix="%" label="of readings checked against a documented tolerance" />
-            <Stat value={0} label="tolerance breaches passed through unflagged" />
+            <Stat value={100} suffix="%" label="of readings checked against a documented tolerance" tone="navy" />
+            <Stat value={0} label="tolerance breaches passed through unflagged" tone="navy" />
           </div>
         </div>
       </div>
 
       <div class="col hero__visual" style="--from:8;--to:13">
-        <CalibrationGrid tone="light" />
+        <div class="hero__visual-panel">
+          <CalibrationGrid tone="navy" caption="within tolerance" />
+        </div>
       </div>
     </div>
   </section>
@@ -146,7 +148,7 @@ const statusMeta = {
         </div>
         <div class="sidecard sidecard--cta">
           <p>Have a program to bring under one roof?</p>
-          <Button href={contactHref} variant="on-navy">Start the conversation</Button>
+          <Button href={contactHref} variant="primary">Start the conversation</Button>
         </div>
       </aside>
     </div>
@@ -213,10 +215,19 @@ const statusMeta = {
 </Base>
 
 <style>
-  /* ---- hero ---- */
-  .hero { padding-top: var(--space-8); }
+  /* ---- hero (navy panel) ---- */
+  .hero { padding-top: var(--space-8); padding-bottom: var(--space-9); }
   .hero__grid { align-items: center; row-gap: var(--space-7); }
-  .hero__sub { margin-top: var(--space-5); font-size: var(--fs-lead); color: var(--color-slate); }
+  .hero__sub { margin-top: var(--space-5); font-size: var(--fs-lead); color: #B5D4F4; }
+  .hero__visual-panel {
+    background: #082038;
+    border: 1px solid var(--color-on-navy-line);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
   .hero__actions { margin-top: var(--space-7); display: flex; flex-direction: column; gap: var(--space-6); }
   .hero__stats {
     display: flex;

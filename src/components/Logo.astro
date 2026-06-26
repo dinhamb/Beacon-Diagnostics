@@ -1,35 +1,59 @@
 ---
 /**
- * Logo lockup. NOTE: the original illustrated logo isn't in the repo yet — this
- * is an on-brand stand-in built from the calibration/resolution metaphor (a
- * reading locking into a tolerance ring), not the lighthouse (retired, Layer 1).
- * Mark in Bright Amber + serif wordmark in navy. Small by default: with this
- * pre-recognition audience the headline carries the confidence load, not a big
- * lockup (Layer 3.1).
+ * Logo lockup — lighthouse mark + BEACON / DIAGNOSTICS wordmark.
+ * Based on the brand reference (navy disc, white lighthouse, red heart, amber
+ * beam). The mark is reused (same shapes) in favicon.svg and the /qc-demo gate.
+ *
+ * `background` controls the on-light vs on-dark palette so the lockup reads on
+ * both the light page body and the navy nav/footer.
  */
-import { withBase } from '../site.ts';
-
 interface Props {
-  tone?: 'navy' | 'light';
+  background?: 'light' | 'dark';
   href?: string | null;
+  size?: number;
   class?: string;
 }
-const { tone = 'navy', href = withBase('/'), class: className = '' } = Astro.props;
-const wordColor = tone === 'navy' ? 'var(--color-navy)' : '#fff';
-const subColor = tone === 'navy' ? 'var(--color-slate)' : 'var(--color-on-navy-dim)';
+import { withBase } from '../site.ts';
+const {
+  background = 'light',
+  href = withBase('/'),
+  size = 34,
+  class: className = '',
+} = Astro.props;
+
+const onDark = background === 'dark';
+const nameColor = onDark ? '#FFFFFF' : 'var(--color-navy)';
+const subColor = onDark ? 'var(--color-amber)' : '#C42E2E'; // amber on navy / red on light
+const ring = onDark ? 'rgba(255,255,255,0.18)' : 'rgba(11,36,71,0.10)';
+
 const Tag = href ? 'a' : 'div';
 ---
 
 <Tag class={`logo ${className}`} href={href ?? undefined} aria-label="Beacon Diagnostics — home">
-  <svg class="logo__mark" width="30" height="30" viewBox="0 0 30 30" fill="none" aria-hidden="true">
-    <!-- tolerance ring -->
-    <circle cx="15" cy="15" r="11" stroke="var(--color-slate-30, #b8c2d2)" stroke-width="1.5" />
-    <!-- the reading converging to a locked value -->
-    <path d="M15 3 v6" stroke="var(--color-amber)" stroke-width="2" stroke-linecap="round" />
-    <path d="M15 21 v6" stroke="var(--color-amber)" stroke-width="2" stroke-linecap="round" />
-    <path d="M3 15 h6" stroke="var(--color-amber)" stroke-width="2" stroke-linecap="round" />
-    <path d="M21 15 h6" stroke="var(--color-amber)" stroke-width="2" stroke-linecap="round" />
-    <circle cx="15" cy="15" r="3.25" fill="var(--color-amber)" />
+  <svg class="logo__mark" width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true">
+    <!-- navy disc -->
+    <circle cx="32" cy="32" r="31" fill="var(--color-navy)" />
+    <circle cx="32" cy="32" r="30.25" stroke={ring} stroke-width="1.5" />
+    <!-- beam -->
+    <path d="M34 23 L63 13 L63 31 Z" fill="var(--color-amber)" opacity="0.55" />
+    <!-- base / dock -->
+    <rect x="20" y="45.5" width="24" height="4.2" rx="1.4" fill="#FFFFFF" />
+    <!-- tower (white trapezoid) -->
+    <path d="M27.4 45.5 L36.6 45.5 L35 26 L29 26 Z" fill="#FFFFFF" />
+    <!-- navy stripes on the tower -->
+    <path d="M28.7 38 L35.3 38 L35.05 35 L28.95 35 Z" fill="var(--color-navy)" />
+    <path d="M29.25 31 L34.75 31 L34.55 29 L29.45 29 Z" fill="var(--color-navy)" opacity="0.9" />
+    <!-- gallery platform -->
+    <rect x="26.5" y="23.4" width="11" height="2.8" rx="0.8" fill="#FFFFFF" />
+    <!-- lantern room -->
+    <rect x="29" y="17.5" width="6" height="6" fill="#FFFFFF" />
+    <line x1="31" y1="17.5" x2="31" y2="23.5" stroke="var(--color-navy)" stroke-width="0.9" />
+    <line x1="33" y1="17.5" x2="33" y2="23.5" stroke="var(--color-navy)" stroke-width="0.9" />
+    <!-- roof -->
+    <path d="M27.6 17.5 L36.4 17.5 L32 11.5 Z" fill="var(--color-navy)" />
+    <circle cx="32" cy="10.4" r="1.3" fill="var(--color-amber)" />
+    <!-- heart -->
+    <path d="M32 37.2 C31 35.4 28.2 35.6 28.2 37.9 C28.2 39.4 30.2 40.6 32 42 C33.8 40.6 35.8 39.4 35.8 37.9 C35.8 35.6 33 35.4 32 37.2 Z" fill="#C42E2E" />
   </svg>
   <span class="logo__word">
     <span class="logo__name">Beacon</span>
@@ -37,36 +61,39 @@ const Tag = href ? 'a' : 'div';
   </span>
 </Tag>
 
-<style define:vars={{ wordColor, subColor }}>
+<style define:vars={{ nameColor, subColor }}>
   .logo {
     display: inline-flex;
     align-items: center;
-    gap: 0.625rem;
+    gap: 0.6rem;
     text-decoration: none;
     line-height: 1;
   }
   .logo__mark { flex: none; }
   .logo__word {
     display: inline-flex;
-    align-items: baseline;
-    gap: 0.4rem;
-    font-family: var(--font-heading);
+    flex-direction: column;
+    gap: 0.12rem;
   }
   .logo__name {
-    font-weight: 600;
-    font-size: 1.1875rem;
-    letter-spacing: -0.01em;
-    color: var(--wordColor);
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 1.0625rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--nameColor);
+    line-height: 1;
   }
   .logo__sub {
     font-family: var(--font-body);
-    font-weight: 500;
-    font-size: 0.8125rem;
-    letter-spacing: 0.04em;
+    font-weight: 600;
+    font-size: 0.625rem;
+    letter-spacing: 0.22em;
     text-transform: uppercase;
     color: var(--subColor);
+    line-height: 1;
   }
   @media (max-width: 480px) {
-    .logo__sub { display: none; } /* keep the mark + name legible on small screens */
+    .logo__sub { letter-spacing: 0.16em; }
   }
 </style>

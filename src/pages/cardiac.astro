@@ -33,8 +33,8 @@ const services = [
   navVariant="service"
   activeTrack="cardiac"
 >
-  <!-- 1. HERO — content 1–7, visual 8–12 -->
-  <section class="section hero">
+  <!-- 1. HERO — navy panel; content 1–7, visual 8–12 -->
+  <section class="section hero panel-navy">
     <div class="grid-container hero__grid">
       <div class="col hero__content" style="--from:1;--to:8" data-reveal>
         <p class="eyebrow"><Icon name={TRACKS.cardiac.icon} size={16} stroke={1.75} /> Remote diagnostics</p>
@@ -51,13 +51,16 @@ const services = [
           <span aria-hidden="true">·</span>
           <strong>Remote monitoring</strong>
         </p>
+        <p class="hero__cred">Co-chair and board director, International Board of Heart Rhythm Examiners</p>
         <div class="hero__actions">
           <Button href={contactHref} variant="primary">Get in touch</Button>
         </div>
       </div>
 
       <div class="col hero__visual" style="--from:8;--to:13">
-        <CalibrationGrid tone="light" />
+        <div class="hero__visual-panel">
+          <CalibrationGrid tone="navy" caption="clarity, resolved" />
+        </div>
       </div>
     </div>
   </section>
@@ -87,13 +90,7 @@ const services = [
   <section class="section cred">
     <div class="grid-container">
       <div class="col cred__aside" style="--from:1;--to:6" data-reveal>
-        <div class="credential">
-          <span class="credential__tag"><Icon name="shield" size={16} stroke={1.75} /> Why trust us</span>
-          <p class="credential__line">
-            Co-chair and board director, International Board of Heart Rhythm
-            Examiners.
-          </p>
-        </div>
+        <ProofCard reserved />
         <ProofCard reserved />
       </div>
       <div class="col cred__body" style="--from:6;--to:13" data-reveal>
@@ -122,29 +119,44 @@ const services = [
         <p class="close__sub measure">
           If that's the kind of help your patients could use, let's talk.
         </p>
-        <Button href={contactHref} variant="on-navy">Get in touch</Button>
+        <Button href={contactHref} variant="primary">Get in touch</Button>
       </div>
     </div>
   </section>
 </Base>
 
 <style>
-  /* ---- hero ---- */
-  .hero { padding-top: var(--space-8); }
+  /* ---- hero (navy panel) ---- */
+  .hero { padding-top: var(--space-8); padding-bottom: var(--space-9); }
   .hero__grid { align-items: center; row-gap: var(--space-7); }
-  .hero__sub { margin-top: var(--space-5); font-size: var(--fs-lead); color: var(--color-slate); }
+  .hero__sub { margin-top: var(--space-5); font-size: var(--fs-lead); color: #B5D4F4; }
   .hero__services {
     margin-top: var(--space-5);
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-3);
     align-items: center;
-    color: var(--color-navy);
+    color: #fff;
     font-size: 1.0625rem;
   }
   .hero__services span { color: var(--color-amber); }
-  .hero__actions { margin-top: var(--space-7); }
-  .hero__visual { align-self: center; }
+  .hero__cred {
+    margin-top: var(--space-4);
+    font-size: var(--fs-small);
+    color: #5F8AC2;
+    max-width: 42ch;
+  }
+  .hero__actions { margin-top: var(--space-6); }
+  .hero__visual { align-self: stretch; }
+  .hero__visual-panel {
+    background: #082038;
+    border: 1px solid var(--color-on-navy-line);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
 
   /* ---- services (navy) ---- */
   .services__h { max-width: 24ch; }
