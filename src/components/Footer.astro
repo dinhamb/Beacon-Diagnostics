@@ -12,11 +12,11 @@ import { SITE, TRACKS, TRACK_ORDER } from '../site.ts';
 const year = new Date().getFullYear();
 ---
 
-<footer class="footer panel-navy" id="contact">
+<footer class="footer" id="contact">
   <div class="grid-container footer__grid">
     <!-- 1. brand statement -->
     <div class="footer__col footer__brand">
-      <Logo background="dark" href={null} />
+      <Logo background="light" href={null} />
       <p class="footer__statement measure">
         Turning a continuous, noisy stream of data into a discrete, trustworthy,
         actionable finding.
@@ -68,7 +68,10 @@ const year = new Date().getFullYear();
 </footer>
 
 <style>
+  /* Light footer — surface panel separated from the page by a top border. */
   .footer {
+    background: var(--color-surface);
+    border-top: 1px solid var(--color-navy-08);
     padding-top: var(--space-9);
     margin-top: var(--space-9);
   }
@@ -81,7 +84,7 @@ const year = new Date().getFullYear();
 
   .footer__statement {
     margin-top: var(--space-4);
-    color: var(--color-on-navy-dim);
+    color: var(--color-slate);
     font-size: var(--fs-small);
     line-height: 1.6;
     max-width: 32ch;
@@ -93,33 +96,33 @@ const year = new Date().getFullYear();
     font-weight: var(--weight-medium);
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: var(--color-amber); /* bright amber on navy (2.1) */
+    color: var(--color-slate);
     margin-bottom: var(--space-4);
   }
   .footer__list { list-style: none; padding: 0; display: grid; gap: var(--space-3); }
   .footer__link {
-    color: rgba(255, 255, 255, 0.88);
+    color: var(--color-navy);
     text-decoration: none;
     font-size: var(--fs-cta);
     transition: color var(--dur-press) var(--ease-resolve);
   }
-  .footer__link:hover { color: #fff; }
+  .footer__link:hover { color: var(--color-amber-deep); }
   .footer__link--icon { display: inline-flex; align-items: center; gap: var(--space-2); }
 
   /* the reserved slot reads intentional, not broken */
   .footer__trust {
-    border: 1px dashed var(--color-on-navy-line);
+    border: 1px dashed var(--color-slate-30);
     border-radius: var(--radius);
     padding: var(--space-5);
   }
   .footer__reserved {
-    color: var(--color-on-navy-dim);
+    color: var(--color-slate);
     font-size: var(--fs-small);
     line-height: 1.55;
   }
 
   .footer__base {
-    border-top: 1px solid var(--color-on-navy-line);
+    border-top: 1px solid var(--color-navy-08);
     padding-block: var(--space-5) var(--space-6);
   }
   .footer__baseinner {
@@ -127,7 +130,7 @@ const year = new Date().getFullYear();
     justify-content: space-between;
     flex-wrap: wrap;
     gap: var(--space-3);
-    color: var(--color-on-navy-dim);
+    color: var(--color-slate);
     font-size: var(--fs-small);
   }
 
