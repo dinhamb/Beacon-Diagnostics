@@ -1,21 +1,21 @@
 ---
 /**
  * CalibrationGrid — the brand motif (Layer 1 + 4.2): scattered readings
- * resolving into a connected signal that locks inside a tolerance band.
- * Matches the system-review visual language: a tolerance rectangle, an amber
- * polyline of readings within it, faint scattered slate dots around, and a
- * caption. SVG + CSS transitions only (no canvas/WebGL) — cheap on mobile.
+ * resolving into a connected signal that locks inside a tolerance band
+ * ("out of noise comes clarity"). SVG + CSS transitions only.
  *
- * Resolves when scrolled into view (shared reveal observer toggles `.is-visible`):
- * scattered amber dots converge to their in-tolerance positions, the connecting
- * line draws in, the band fades up. Sub-400ms, eased, honors reduced-motion.
+ * It runs its OWN intersection observer (not the shared one-time reveal) so it:
+ *  - briefly holds the scattered state, then resolves — visible even when the
+ *    motif is already on-screen at load (e.g. the hero), and
+ *  - replays each time it scrolls back into view.
+ * Honors prefers-reduced-motion (renders the resolved state, no motion).
  */
 interface Props {
   tone?: 'light' | 'navy';
   caption?: string;
   class?: string;
 }
-const { tone = 'light', caption = 'within tolerance', class: className = '' } = Astro.props;
+const { tone = 'light', caption = 'out of noise comes clarity', class: className = '' } = Astro.props;
 
 // Deterministic scatter (mulberry32) so the build is stable.
 function prng(seed: number) {
@@ -54,7 +54,7 @@ const noise = [
 ].map(([x, y]) => ({ x, y }));
 ---
 
-<div class={`cal cal--${tone} ${className}`} data-reveal aria-hidden="true">
+<div class={`cal cal--${tone} ${className}`} data-motif aria-hidden="true">
   <svg viewBox={`0 0 ${W} ${H}`} width={W} height={H} preserveAspectRatio="xMidYMid meet">
     <!-- noise -->
     <g class="noise">
@@ -108,7 +108,6 @@ const noise = [
     opacity: 0;
     transition: opacity var(--dur-reveal) var(--ease-resolve);
   }
-  .cal--navy .band { opacity: 0; }
 
   .signal {
     fill: none;
@@ -117,15 +116,15 @@ const noise = [
     opacity: 0.6;
     stroke-dasharray: 1;
     stroke-dashoffset: 1;
-    transition: stroke-dashoffset var(--dur-reveal) var(--ease-resolve) 120ms;
+    transition: stroke-dashoffset 520ms var(--ease-resolve) 140ms;
   }
 
   .mark {
     fill: var(--_amber);
     transform: translate(var(--dx), var(--dy));
-    opacity: 0.25;
-    transition: transform var(--dur-reveal) var(--ease-resolve),
-      opacity var(--dur-reveal) var(--ease-resolve);
+    opacity: 0.22;
+    transition: transform 460ms var(--ease-resolve),
+      opacity 460ms var(--ease-resolve);
     transition-delay: var(--d);
   }
 
@@ -135,14 +134,14 @@ const noise = [
     fill: var(--_caption);
     letter-spacing: 0.02em;
     opacity: 0;
-    transition: opacity var(--dur-reveal) var(--ease-resolve) 200ms;
+    transition: opacity var(--dur-reveal) var(--ease-resolve) 260ms;
   }
 
-  /* resolved */
-  .cal.is-visible .band { opacity: 0.9; }
-  .cal.is-visible .signal { stroke-dashoffset: 0; }
-  .cal.is-visible .mark { transform: translate(0, 0); opacity: 1; }
-  .cal.is-visible .caption { opacity: 1; }
+  /* resolved (toggled by the motif's own observer) */
+  .cal.is-resolved .band { opacity: 0.9; }
+  .cal.is-resolved .signal { stroke-dashoffset: 0; }
+  .cal.is-resolved .mark { transform: translate(0, 0); opacity: 1; }
+  .cal.is-resolved .caption { opacity: 1; }
 
   @media (prefers-reduced-motion: reduce) {
     .band { opacity: 0.9; }
@@ -151,3 +150,37 @@ const noise = [
     .caption { opacity: 1; }
   }
 </style>
+
+<script>
+  // The motif drives its own resolve so it's visible even at the top of the
+  // page, and replays when scrolled back into view.
+  function initMotifs() {
+    const els = document.querySelectorAll<HTMLElement>('.cal[data-motif]:not([data-motif-bound])');
+    if (!els.length) return;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    els.forEach((el) => {
+      el.dataset.motifBound = '1';
+      if (reduce) {
+        el.classList.add('is-resolved');
+        return;
+      }
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              // brief hold on the scattered state so the resolve is seen
+              setTimeout(() => el.classList.add('is-resolved'), 140);
+            } else {
+              el.classList.remove('is-resolved'); // arm for replay
+            }
+          });
+        },
+        { threshold: 0.4 }
+      );
+      io.observe(el);
+    });
+  }
+  initMotifs();
+  document.addEventListener('astro:page-load', initMotifs);
+</script>
