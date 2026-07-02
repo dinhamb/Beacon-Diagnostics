@@ -8,6 +8,9 @@
   wording the owner supplies explicitly). No invented copy, taglines, or
   placeholder marketing language — if a section needs words that don't exist
   yet, stop and ask for exact wording. No adjective without a fact behind it.
+- **Display headlines carry no trailing punctuation** (e.g. "Fewer surprises,
+  faster answers" without the period) — a deliberate, permanent owner
+  exception to the doc's written copy, not an error.
 - **Visual source of truth:** the annotated visual build reference HTML
   (owner-supplied). Where it conflicts with the brand doc's exact values, the
   HTML wins — but flag the discrepancy rather than resolving it silently.
