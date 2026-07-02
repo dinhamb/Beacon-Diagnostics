@@ -1,70 +1,99 @@
 ---
 /**
- * TEMPORARY holding page — the real site is intentionally taken dark so it
- * isn't publicly visible. Self-contained (no nav/footer, no external assets,
- * noindex) so nothing of the real site is exposed.
- *
- * TO RELAUNCH: revert the "Take site dark" commit (restores the real gateway,
- * imaging-qc, cardiac, and /qc-demo), then re-enable the push trigger in
- * .github/workflows/deploy.yml.
+ * Front gateway (Layer 3.1). Job: confirm credibility fast and route an
+ * already-warm visitor to the right track. Not a persuasion page — a
+ * confirmation-and-routing page. Centered/symmetric grid (2.3); two tracks at
+ * EQUAL visual weight. Headline is forward-safe (no "reconnecting"/prior-contact
+ * framing) so it survives being forwarded.
  */
+import Base from '../layouts/Base.astro';
+import RoutingTile from '../components/RoutingTile.astro';
+import CalibrationGrid from '../components/CalibrationGrid.astro';
+import { TRACKS, TRACK_ORDER } from '../site.ts';
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="robots" content="noindex, nofollow" />
-    <title>Beacon Diagnostics</title>
-    <style>
-      * { box-sizing: border-box; }
-      html, body { height: 100%; }
-      body {
-        margin: 0;
-        display: grid;
-        place-items: center;
-        min-height: 100vh;
-        padding: 24px;
-        text-align: center;
-        background: radial-gradient(1200px 600px at 50% -10%, #12325f 0%, #0B2447 55%);
-        color: #fff;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      }
-      .mark { width: 88px; height: 88px; margin: 0 auto 24px; }
-      h1 {
-        font-family: Georgia, 'Times New Roman', serif;
-        font-weight: 600;
-        font-size: 27px;
-        letter-spacing: 0.01em;
-        margin: 0 0 10px;
-      }
-      .sub {
-        font-size: 12px;
-        letter-spacing: 0.22em;
-        text-transform: uppercase;
-        color: #D4A017;
-        margin: 0 0 22px;
-      }
-      p { color: #B5D4F4; font-size: 15px; line-height: 1.6; margin: 0; max-width: 30ch; }
-    </style>
-  </head>
-  <body>
-    <main>
-      <svg class="mark" viewBox="0 0 64 64" fill="none" aria-hidden="true">
-        <path d="M34 23 L60 14 L60 30 Z" fill="#D4A017" opacity="0.55" />
-        <rect x="21" y="45.5" width="22" height="4.2" rx="1.4" fill="#fff" />
-        <path d="M27.4 45.5 L36.6 45.5 L35 26 L29 26 Z" fill="#fff" />
-        <path d="M28.7 38 L35.3 38 L35.05 35 L28.95 35 Z" fill="#0B2447" />
-        <rect x="26.5" y="23.4" width="11" height="2.8" rx="0.8" fill="#fff" />
-        <rect x="29" y="17.5" width="6" height="6" fill="#fff" />
-        <path d="M27.6 17.5 L36.4 17.5 L32 11.5 Z" fill="#fff" />
-        <circle cx="32" cy="10.4" r="1.3" fill="#D4A017" />
-        <path d="M32 37.2 C31 35.4 28.2 35.6 28.2 37.9 C28.2 39.4 30.2 40.6 32 42 C33.8 40.6 35.8 39.4 35.8 37.9 C35.8 35.6 33 35.4 32 37.2 Z" fill="#C42E2E" />
-      </svg>
-      <h1>Beacon Diagnostics</h1>
-      <div class="sub">Diagnostics &amp; quality assurance</div>
-      <p>Our website is coming soon.</p>
-    </main>
-  </body>
-</html>
+<Base
+  title="Beacon Diagnostics"
+  description="Beacon Diagnostics turns continuous, noisy data into discrete, verified findings — across imaging and equipment QC, and remote cardiac diagnostics."
+  navVariant="gateway"
+>
+  <!-- Hero: centered, symmetric (columns 3–10 of 12) -->
+  <section class="section gateway-hero">
+    <div class="grid-container">
+      <div class="col gateway-hero__content" style="--from:3;--to:11" data-reveal>
+        <p class="eyebrow">Diagnostics &amp; quality assurance</p>
+        <h1 class="gateway-hero__title">A finding you can stand behind.</h1>
+        <p class="gateway-hero__sub measure">
+          Beacon Diagnostics turns a continuous, noisy stream of data into a
+          discrete, trustworthy result — in imaging and equipment QC, and in
+          remote cardiac diagnostics.
+        </p>
+      </div>
+
+      <div class="col gateway-hero__motif" style="--from:3;--to:11">
+        <CalibrationGrid tone="light" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Routing: two tracks, equal weight (6/6) -->
+  <section class="section--tight gateway-route">
+    <div class="grid-container">
+      <div class="col gateway-route__lead" style="--from:3;--to:11" data-reveal>
+        <h2 class="gateway-route__h2">Choose your track</h2>
+        <p class="gateway-route__note">
+          Two ways we work — each with its own depth. Pick the one you came for.
+        </p>
+      </div>
+    </div>
+    <div class="grid-container gateway-route__tiles">
+      <div class="col" style="--from:1;--to:7" data-reveal>
+        <RoutingTile
+          href={TRACKS[TRACK_ORDER[0]].href}
+          icon={TRACKS[TRACK_ORDER[0]].icon}
+          title={TRACKS[TRACK_ORDER[0]].label}
+          blurb={TRACKS[TRACK_ORDER[0]].blurb}
+        />
+      </div>
+      <div class="col" style="--from:7;--to:13" data-reveal>
+        <RoutingTile
+          href={TRACKS[TRACK_ORDER[1]].href}
+          icon={TRACKS[TRACK_ORDER[1]].icon}
+          title={TRACKS[TRACK_ORDER[1]].label}
+          blurb={TRACKS[TRACK_ORDER[1]].blurb}
+        />
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .gateway-hero { padding-top: var(--space-9); padding-bottom: var(--space-6); }
+  .gateway-hero__content { text-align: center; }
+  .gateway-hero__title { margin-top: var(--space-4); }
+  .gateway-hero__sub {
+    margin: var(--space-5) auto 0;
+    font-size: var(--fs-lead);
+    color: var(--color-slate);
+  }
+  .gateway-hero__motif {
+    margin-top: var(--space-8);
+    /* the motif sits outside the reading path — felt, not read (3.2) */
+    opacity: 0.92;
+  }
+
+  .gateway-route { padding-bottom: var(--space-10); }
+  .gateway-route__lead { text-align: center; margin-bottom: var(--space-7); }
+  .gateway-route__note {
+    margin-top: var(--space-3);
+    color: var(--color-slate);
+    font-size: var(--fs-lead);
+  }
+  .gateway-route__tiles { row-gap: var(--gutter); }
+
+  @media (max-width: 880px) {
+    .gateway-hero__content { text-align: left; }
+    .gateway-hero__sub { margin-inline: 0; }
+    .gateway-route__lead { text-align: left; }
+  }
+</style>
