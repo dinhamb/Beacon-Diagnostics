@@ -5,13 +5,16 @@
  * Layout (exact reference values): content:visual = 1.1fr : 0.9fr · content
  * padding 40px block (container supplies the left margin) · H1 → sub gap 14px
  * · sub → CTA gap 16px · cred line 12px #5F8AC2 with 24px below · visual side
- * on the deep panel (#082038) with the track's calibration motif SVG copied
- * verbatim from the reference.
+ * on the deep panel (#082038).
+ *
+ * Visual: the static dot-field motif (reference "Candidate C") — 8×5 grid,
+ * 6px dots, 18px gap, slate at 50% opacity with a fixed amber cluster per
+ * track. Rendered at build time: NO JavaScript, no scroll trigger, no
+ * animation, per the reference build note (that fragility is what broke the
+ * original locking-grid motif).
  *
  * NO stats row, NO methodology teaser — deliberate (reference annotation +
  * 3.6 minimal-content decision). A stats row returns only with real figures.
- * The CTA is the mock's spec (deep amber fill, white text, 11px/22px padding,
- * 14px/500): "one primary CTA only, never two competing amber buttons" (3.2).
  */
 import { SITE } from '../site.ts';
 
@@ -22,6 +25,17 @@ interface Props {
 }
 const { variant, sub, cred } = Astro.props;
 const contactHref = `mailto:${SITE.email}`;
+
+// Exact amber-cluster positions and captions from the reference build note.
+const AMBER: Record<Props['variant'], number[]> = {
+  imaging: [12, 13, 21, 22, 29, 30], // loose diagonal cluster
+  cardiac: [3, 11, 19, 20, 28], // upper-right-leaning cluster
+};
+const CAPTION: Record<Props['variant'], string> = {
+  imaging: 'signal, resolved',
+  cardiac: 'clarity, resolved',
+};
+const dots = Array.from({ length: 40 }, (_, i) => AMBER[variant].includes(i));
 ---
 
 <section class="hero panel-navy">
@@ -35,39 +49,10 @@ const contactHref = `mailto:${SITE.email}`;
       </div>
 
       <div class="hero__visual" aria-hidden="true">
-        {variant === 'imaging' ? (
-          <svg width="100%" height="100%" viewBox="0 0 320 300" class="hero__motif">
-            <g opacity="0.5">
-              <circle cx="60" cy="60" r="2.5" fill="#3D5A80"/><circle cx="90" cy="40" r="2.5" fill="#3D5A80"/>
-              <circle cx="220" cy="50" r="2.5" fill="#3D5A80"/><circle cx="260" cy="85" r="2.5" fill="#3D5A80"/>
-              <circle cx="55" cy="250" r="2.5" fill="#3D5A80"/><circle cx="240" cy="240" r="2.5" fill="#3D5A80"/>
-            </g>
-            <rect x="60" y="120" width="200" height="65" fill="none" stroke="#D4A017" stroke-width="1" rx="4" opacity="0.9"/>
-            <circle cx="80" cy="140" r="3" fill="#D4A017"/><circle cx="120" cy="155" r="3" fill="#D4A017"/>
-            <circle cx="160" cy="145" r="3" fill="#D4A017"/><circle cx="200" cy="165" r="3" fill="#D4A017"/><circle cx="240" cy="150" r="3" fill="#D4A017"/>
-            <line x1="80" y1="140" x2="120" y2="155" stroke="#D4A017" stroke-width="1" opacity="0.6"/>
-            <line x1="120" y1="155" x2="160" y2="145" stroke="#D4A017" stroke-width="1" opacity="0.6"/>
-            <line x1="160" y1="145" x2="200" y2="165" stroke="#D4A017" stroke-width="1" opacity="0.6"/>
-            <line x1="200" y1="165" x2="240" y2="150" stroke="#D4A017" stroke-width="1" opacity="0.6"/>
-            <text x="80" y="205" font-size="10" fill="#85B7EB">within tolerance</text>
-          </svg>
-        ) : (
-          <svg width="100%" height="100%" viewBox="0 0 320 300" class="hero__motif">
-            <g opacity="0.5">
-              <circle cx="70" cy="55" r="2.5" fill="#3D5A80"/><circle cx="100" cy="85" r="2.5" fill="#3D5A80"/>
-              <circle cx="220" cy="45" r="2.5" fill="#3D5A80"/><circle cx="250" cy="95" r="2.5" fill="#3D5A80"/>
-              <circle cx="60" cy="235" r="2.5" fill="#3D5A80"/><circle cx="230" cy="225" r="2.5" fill="#3D5A80"/>
-            </g>
-            <rect x="70" y="130" width="180" height="55" fill="none" stroke="#D4A017" stroke-width="1" rx="4" opacity="0.9"/>
-            <circle cx="90" cy="148" r="3" fill="#D4A017"/><circle cx="130" cy="158" r="3" fill="#D4A017"/>
-            <circle cx="170" cy="145" r="3" fill="#D4A017"/><circle cx="210" cy="163" r="3" fill="#D4A017"/><circle cx="240" cy="150" r="3" fill="#D4A017"/>
-            <line x1="90" y1="148" x2="130" y2="158" stroke="#D4A017" stroke-width="1" opacity="0.6"/>
-            <line x1="130" y1="158" x2="170" y2="145" stroke="#D4A017" stroke-width="1" opacity="0.6"/>
-            <line x1="170" y1="145" x2="210" y2="163" stroke="#D4A017" stroke-width="1" opacity="0.6"/>
-            <line x1="210" y1="163" x2="240" y2="150" stroke="#D4A017" stroke-width="1" opacity="0.6"/>
-            <text x="90" y="205" font-size="10" fill="#85B7EB">clarity, resolved</text>
-          </svg>
-        )}
+        <div class="hero__dotgrid">
+          {dots.map((on) => <div class={on ? 'dot dot--on' : 'dot'} />)}
+        </div>
+        <div class="hero__caption">{CAPTION[variant]}</div>
       </div>
     </div>
   </div>
@@ -138,9 +123,38 @@ const contactHref = `mailto:${SITE.email}`;
     position: relative;
     background: var(--color-navy-deep);
   }
-  .hero__motif {
+  /* Static dot field — exact reference values (.dotgrid/.dot/.visual-caption) */
+  .hero__dotgrid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    gap: 18px;
+    width: 240px;
+    height: 140px;
     position: absolute;
-    inset: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -52%);
+  }
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--color-slate);
+    opacity: 0.5;
+    margin: auto;
+  }
+  .dot--on {
+    background: var(--color-amber);
+    opacity: 1;
+  }
+  .hero__caption {
+    position: absolute;
+    bottom: 16px;
+    left: 20px;
+    font-family: var(--font-body);
+    font-size: 10px;
+    color: var(--color-on-navy-soft);
   }
 
   @media (max-width: 880px) {
