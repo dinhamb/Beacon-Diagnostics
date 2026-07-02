@@ -1,0 +1,31 @@
+---
+/**
+ * Imaging Support Services — track page, rebuilt to the visual reference.
+ * Hero only: 3.6's minimal-content decision deliberately omits workflow and
+ * operational detail ("name and invite contact"). The old proof/methodology/
+ * QC-log sections carried unconfirmed copy and are removed; sections return
+ * only with confirmed content.
+ *
+ * Copy is 3.6.2 verbatim as rendered in the reference: positioning line as
+ * H1 (mock's line break + no trailing period), the five services at equal
+ * weight, CTA "Get in touch". No stats row (reference annotation: previous
+ * figures were never real). No track-specific credentials — this track draws
+ * on the shared About content (3.6.2).
+ */
+import Base from '../layouts/Base.astro';
+import TrackHero from '../components/TrackHero.astro';
+
+const sub =
+  'Equipment compliance testing (QLD regulatory requirements) &nbsp;&middot;&nbsp; QC auditing and support &nbsp;&middot;&nbsp; Quality optimisation and protocol review &nbsp;&middot;&nbsp; After-hours and on-demand physicist support &nbsp;&middot;&nbsp; Radiation safety advice';
+---
+
+<Base
+  title="Imaging Support Services"
+  description="Imaging Support Services — equipment compliance testing, QC auditing and support, quality optimisation and protocol review, after-hours and on-demand physicist support, radiation safety advice."
+  navVariant="service"
+  activeTrack="imaging"
+>
+  <TrackHero variant="imaging" sub={sub}>
+    Fewer surprises,<br />faster answers
+  </TrackHero>
+</Base>

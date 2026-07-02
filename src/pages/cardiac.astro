@@ -1,0 +1,29 @@
+---
+/**
+ * Cardiac Services — track page, rebuilt to the visual reference.
+ * Deliberately lighter than the imaging track (reference annotation): same
+ * panel treatment, same motif, same spacing rhythm — only the content density
+ * differs. Hero only, per 3.6's minimal-content decision.
+ *
+ * Copy is 3.6.1 verbatim as rendered in the reference: positioning line as
+ * H1 (mock's line break + no trailing period), three services at equal
+ * weight, the confirmed credentials line, CTA "Get in touch". No stats row.
+ */
+import Base from '../layouts/Base.astro';
+import TrackHero from '../components/TrackHero.astro';
+
+const sub =
+  'CIED support &nbsp;&middot;&nbsp; Holter and event monitoring &nbsp;&middot;&nbsp; Remote monitoring';
+const cred = 'Co-chair and board director, International Board of Heart Rhythm Examiners';
+---
+
+<Base
+  title="Cardiac Services"
+  description="Cardiac Services — CIED support, Holter and event monitoring, remote monitoring."
+  navVariant="service"
+  activeTrack="cardiac"
+>
+  <TrackHero variant="cardiac" sub={sub} cred={cred}>
+    Get clarity quicker,<br />refer smarter
+  </TrackHero>
+</Base>
