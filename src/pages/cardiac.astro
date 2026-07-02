@@ -7,14 +7,15 @@
  *
  * Copy is 3.6.1 verbatim as rendered in the reference: positioning line as
  * H1 (mock's line break + no trailing period), three services at equal
- * weight, the confirmed credentials line, CTA "Get in touch". No stats row.
+ * weight, CTA "Get in touch". No stats row. NO credentials line for now —
+ * pending final wording (owner decision; the reference markup that showed
+ * it was stale).
  */
 import Base from '../layouts/Base.astro';
 import TrackHero from '../components/TrackHero.astro';
 
 const sub =
   'CIED support &nbsp;&middot;&nbsp; Holter and event monitoring &nbsp;&middot;&nbsp; Remote monitoring';
-const cred = 'Co-chair and board director, International Board of Heart Rhythm Examiners';
 ---
 
 <Base
@@ -23,7 +24,7 @@ const cred = 'Co-chair and board director, International Board of Heart Rhythm E
   navVariant="service"
   activeTrack="cardiac"
 >
-  <TrackHero variant="cardiac" sub={sub} cred={cred}>
+  <TrackHero variant="cardiac" sub={sub}>
     Get clarity quicker,<br />refer smarter
   </TrackHero>
 </Base>
