@@ -5,7 +5,10 @@
  * reused by the favicon and the /qc-demo gate.
  *
  * `background` controls the on-light vs on-dark palette so the lockup reads on
- * both the light page body and the navy nav/footer.
+ * both the light page body and the navy nav/footer. On dark it also swaps the
+ * mark for logo-on-dark.svg — same artwork cropped from the source SVG, with
+ * only the disc recolored to #F7F8FA (the navy disc disappears on navy). The
+ * lighthouse is a knockout in that art, so it shows the navy behind it.
  */
 interface Props {
   background?: 'light' | 'dark';
@@ -24,7 +27,7 @@ const {
 const onDark = background === 'dark';
 const nameColor = onDark ? '#FFFFFF' : 'var(--color-navy)';
 const subColor = onDark ? 'var(--color-amber)' : '#C42E2E';
-const mark = withBase('/assets/beacon-mark.png');
+const mark = withBase(onDark ? '/assets/logo-on-dark.svg' : '/assets/beacon-mark.png');
 
 const Tag = href ? 'a' : 'div';
 ---
