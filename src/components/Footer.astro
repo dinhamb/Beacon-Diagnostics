@@ -51,19 +51,25 @@ const telHref = `tel:${SITE.phone.replace(/\s/g, '')}`;
         </ul>
       </nav>
 
-      <!-- 4. trust-proof slot — reserved, visibly empty pre-launch (4.3) -->
-      <div class="footer__col">
-        <h2 class="footer__title">trusted by</h2>
-        <p class="footer__reserved">reserved — populates after pilot sites</p>
-      </div>
+      <!-- 4. trust-proof slot: the grid keeps its four-column shape, but the
+           column renders nothing until real pilot-site content exists (review
+           decision — no placeholder text at all). -->
     </div>
 
     <div class="footer__bottom">
       <span>
         <a class="footer__bottom-link" href={`mailto:${SITE.email}`}>{SITE.email}</a>
         &nbsp;&middot;&nbsp;
-        <a class="footer__bottom-link" href={telHref} title={SITE.phoneMnemonic}>{SITE.phone}</a>
-        ({SITE.phoneMnemonic})
+        <!-- number by default; crossfades to the 1300 ALL HRT mnemonic on
+             hover/focus (review decision). Both forms exposed to AT. -->
+        <a
+          class="footer__bottom-link footer__phone"
+          href={telHref}
+          aria-label={`${SITE.phone} (${SITE.phoneMnemonic})`}
+        >
+          <span class="footer__phone-num" aria-hidden="true">{SITE.phone}</span>
+          <span class="footer__phone-mn" aria-hidden="true">{SITE.phoneMnemonic}</span>
+        </a>
       </span>
       <div class="footer__legal">
         <span>&copy; {year} beacon diagnostics</span>
@@ -144,6 +150,22 @@ const telHref = `tel:${SITE.phone.replace(/\s/g, '')}`;
     transition: color var(--dur-press) var(--ease-resolve);
   }
   .footer__bottom-link:hover { color: var(--color-on-navy); }
+
+  /* Phone crossfade: both forms share one grid cell so the link keeps the
+     width of the longer one — no layout shift on hover. */
+  .footer__phone {
+    display: inline-grid;
+    text-align: left;
+  }
+  .footer__phone > span {
+    grid-area: 1 / 1;
+    transition: opacity 150ms var(--ease-resolve);
+  }
+  .footer__phone-mn { opacity: 0; }
+  .footer__phone:hover .footer__phone-num,
+  .footer__phone:focus-visible .footer__phone-num { opacity: 0; }
+  .footer__phone:hover .footer__phone-mn,
+  .footer__phone:focus-visible .footer__phone-mn { opacity: 1; }
 
   @media (max-width: 880px) {
     .footer__inner { padding-inline: var(--grid-pad-mobile); }
