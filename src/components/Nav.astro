@@ -76,8 +76,12 @@ const home = withBase('/');
 </header>
 
 <style>
-  /* The bar is the top segment of the navy panel (reference: .navbar.bordered). */
+  /* The bar is the top segment of the navy panel (reference: .navbar.bordered).
+     Sticky — the ONE sticky element on the page (4.1), per review decision. */
   .nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
     background: var(--color-navy);
     border-bottom: 0.5px solid var(--color-navy-hairline);
   }
@@ -113,11 +117,14 @@ const home = withBase('/');
   }
   .nav__link:hover { color: #fff; }
 
-  /* Contact — the one bordered/distinct nav item ("one accent, one job") */
+  /* Contact — the one bordered/distinct nav item ("one accent, one job").
+     Sized to the markdown doc's CTA spec (15px/500) per review decision,
+     not the mock's 11px. */
   .nav__contact {
     font-family: var(--font-body);
-    font-size: 11px;
-    font-weight: 400;
+    font-size: var(--fs-cta);
+    font-weight: var(--weight-medium);
+    letter-spacing: var(--ls-cta);
     color: #fff;
     text-decoration: none;
     border: 0.5px solid var(--color-slate);

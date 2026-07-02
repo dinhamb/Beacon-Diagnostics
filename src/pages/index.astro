@@ -3,56 +3,31 @@
  * Front gateway (Layer 3.1). Job: confirm credibility fast and route an
  * already-warm visitor to the right track. Not a persuasion page — a
  * confirmation-and-routing page. Centered/symmetric grid (2.3); two tracks at
- * EQUAL visual weight. Headline is forward-safe (no "reconnecting"/prior-contact
- * framing) so it survives being forwarded.
+ * EQUAL visual weight (6/6).
+ *
+ * NO hero headline yet, deliberately: 3.6 contains no confirmed gateway
+ * headline copy, and nothing gets invented — the routing panel opens the page
+ * until exact wording is confirmed. Copy on this page is limited to the two
+ * confirmed track names and the confirmed About sentence (3.6.3).
  */
 import Base from '../layouts/Base.astro';
 import RoutingTile from '../components/RoutingTile.astro';
-import CalibrationGrid from '../components/CalibrationGrid.astro';
 import { TRACKS, TRACK_ORDER } from '../site.ts';
 ---
 
 <Base
   title="Beacon Diagnostics"
-  description="Beacon Diagnostics turns continuous, noisy data into discrete, verified findings — across imaging and equipment QC, and remote cardiac diagnostics."
+  description="Beacon Diagnostics — Imaging Support Services and Cardiac Services."
   navVariant="gateway"
 >
-  <!-- Hero: centered, symmetric (columns 3–10 of 12) -->
-  <section class="section gateway-hero">
-    <div class="grid-container">
-      <div class="col gateway-hero__content" style="--from:3;--to:11" data-reveal>
-        <p class="eyebrow">Diagnostics &amp; quality assurance</p>
-        <h1 class="gateway-hero__title">A finding you can stand behind.</h1>
-        <p class="gateway-hero__sub measure">
-          Beacon Diagnostics turns a continuous, noisy stream of data into a
-          discrete, trustworthy result — in imaging and equipment QC, and in
-          remote cardiac diagnostics.
-        </p>
-      </div>
-
-      <div class="col gateway-hero__motif" style="--from:3;--to:11">
-        <CalibrationGrid tone="light" />
-      </div>
-    </div>
-  </section>
-
-  <!-- Routing: two tracks, equal weight (6/6) -->
-  <section class="section--tight gateway-route">
-    <div class="grid-container">
-      <div class="col gateway-route__lead" style="--from:3;--to:11" data-reveal>
-        <h2 class="gateway-route__h2">Choose your track</h2>
-        <p class="gateway-route__note">
-          Two ways we work — each with its own depth. Pick the one you came for.
-        </p>
-      </div>
-    </div>
+  <!-- Routing: navy panel continuing from the nav; two tracks, equal 6/6 -->
+  <section class="gateway-route panel-navy">
     <div class="grid-container gateway-route__tiles">
       <div class="col" style="--from:1;--to:7" data-reveal>
         <RoutingTile
           href={TRACKS[TRACK_ORDER[0]].href}
           icon={TRACKS[TRACK_ORDER[0]].icon}
           title={TRACKS[TRACK_ORDER[0]].label}
-          blurb={TRACKS[TRACK_ORDER[0]].blurb}
         />
       </div>
       <div class="col" style="--from:7;--to:13" data-reveal>
@@ -60,40 +35,50 @@ import { TRACKS, TRACK_ORDER } from '../site.ts';
           href={TRACKS[TRACK_ORDER[1]].href}
           icon={TRACKS[TRACK_ORDER[1]].icon}
           title={TRACKS[TRACK_ORDER[1]].label}
-          blurb={TRACKS[TRACK_ORDER[1]].blurb}
         />
+      </div>
+    </div>
+  </section>
+
+  <!-- About — confirmed content (3.6.3), reference-exact panel treatment:
+       navy panel, 24px/28px padding, 15px #B5D4F4 text -->
+  <section class="section--tight">
+    <div class="grid-container">
+      <div class="col" style="--from:1;--to:13" data-reveal>
+        <div class="about-panel" id="about">
+          <p class="about-panel__label">about</p>
+          <p class="about-panel__text">
+            Staff are senior clinicians in their field, with 15 years&rsquo;
+            experience in large hospital settings.
+          </p>
+        </div>
       </div>
     </div>
   </section>
 </Base>
 
 <style>
-  .gateway-hero { padding-top: var(--space-9); padding-bottom: var(--space-6); }
-  .gateway-hero__content { text-align: center; }
-  .gateway-hero__title { margin-top: var(--space-4); }
-  .gateway-hero__sub {
-    margin: var(--space-5) auto 0;
-    font-size: var(--fs-lead);
-    color: var(--color-slate);
-  }
-  .gateway-hero__motif {
-    margin-top: var(--space-8);
-    /* the motif sits outside the reading path — felt, not read (3.2) */
-    opacity: 0.92;
-  }
-
-  .gateway-route { padding-bottom: var(--space-10); }
-  .gateway-route__lead { text-align: center; margin-bottom: var(--space-7); }
-  .gateway-route__note {
-    margin-top: var(--space-3);
-    color: var(--color-slate);
-    font-size: var(--fs-lead);
-  }
+  .gateway-route { padding-block: var(--space-9); }
   .gateway-route__tiles { row-gap: var(--gutter); }
 
-  @media (max-width: 880px) {
-    .gateway-hero__content { text-align: left; }
-    .gateway-hero__sub { margin-inline: 0; }
-    .gateway-route__lead { text-align: left; }
+  .about-panel {
+    background: var(--color-navy);
+    border-radius: 12px;
+    padding: 24px 28px; /* exact reference values */
+  }
+  .about-panel__label {
+    font-family: var(--font-body);
+    font-size: 10px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--color-on-navy-faint);
+    margin-bottom: var(--space-2);
+  }
+  .about-panel__text {
+    font-family: var(--font-body);
+    font-size: 15px; /* reference .sub treatment */
+    line-height: 1.6;
+    color: var(--color-on-navy);
+    margin: 0;
   }
 </style>

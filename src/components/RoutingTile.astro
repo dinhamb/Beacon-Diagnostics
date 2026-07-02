@@ -3,8 +3,11 @@
  * RoutingTile — a gateway routing card (Layer 3.1). The two tracks are presented
  * with EQUAL visual weight; neither subordinate. Identical structure, identical
  * emphasis — asymmetry here would undercut the routing logic itself.
- * The whole card is the target (a calm, confident affordance), with an arrow
- * that nudges on hover (restraint, not bounce — 4.2).
+ *
+ * Bare track name only — no blurb/descriptive copy until exact wording is
+ * confirmed (3.6 has none). Sits on the navy panel: deep-panel fill (#082038)
+ * with the navy hairline, track icon as a thin bright-amber mark (2.1/2.4).
+ * The whole card is the target; the arrow nudges on hover (restraint, 4.2).
  */
 import Icon from './Icon.astro';
 
@@ -12,9 +15,8 @@ interface Props {
   href: string;
   icon: string;
   title: string;
-  blurb: string;
 }
-const { href, icon, title, blurb } = Astro.props;
+const { href, icon, title } = Astro.props;
 ---
 
 <a class="tile" href={href}>
@@ -22,65 +24,41 @@ const { href, icon, title, blurb } = Astro.props;
     <Icon name={icon as any} size={26} stroke={1.5} />
   </span>
   <h2 class="tile__title">{title}</h2>
-  <p class="tile__blurb">{blurb}</p>
-  <span class="tile__cta">
-    Enter <Icon name="arrow-right" size={18} stroke={2} class="tile__arrow" />
-  </span>
+  <Icon name="arrow-right" size={18} stroke={1.75} class="tile__arrow" />
 </a>
 
 <style>
   .tile {
     display: flex;
-    flex-direction: column;
-    height: 100%;
-    padding: var(--space-7);
-    background: var(--color-surface);
-    border: 1px solid var(--color-navy-08);
-    border-radius: var(--radius-lg);
+    align-items: center;
+    gap: var(--space-5);
+    padding: var(--space-6) var(--space-6);
+    min-height: 108px;
+    background: var(--color-navy-deep);
+    border: 0.5px solid var(--color-navy-hairline);
+    border-radius: var(--radius);
     text-decoration: none;
-    color: var(--color-text);
-    box-shadow: var(--shadow-1);
-    transition: transform var(--dur-press) var(--ease-resolve),
-      box-shadow var(--dur-press) var(--ease-resolve),
-      border-color var(--dur-press) var(--ease-resolve);
+    transition: border-color var(--dur-press) var(--ease-resolve),
+      transform var(--dur-press) var(--ease-resolve);
   }
-  .tile:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-2);
-    border-color: var(--color-slate-30);
-  }
+  .tile:hover { border-color: var(--color-slate); }
+  .tile:active { transform: scale(0.98); } /* press state per 4.2 */
 
   .tile__icon {
     display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 52px;
-    height: 52px;
-    border-radius: var(--radius);
-    background: var(--color-amber-12);
-    color: var(--color-amber-deep); /* thin mark on light tint — accessible */
-    margin-bottom: var(--space-5);
+    flex: none;
+    color: var(--color-amber); /* thin bright-amber mark on navy (2.1) */
   }
-
   .tile__title {
     font-size: var(--fs-h3);
-    margin-bottom: var(--space-3);
-  }
-  .tile__blurb {
-    color: var(--color-slate);
-    font-size: 0.9375rem;
-    line-height: 1.6;
+    color: #fff;
+    margin: 0;
     flex: 1;
   }
-  .tile__cta {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-    margin-top: var(--space-6);
-    font-size: var(--fs-cta);
-    font-weight: var(--weight-medium);
-    color: var(--color-navy);
+  :global(.tile__arrow) { flex: none; }
+  .tile > :global(.tile__arrow) {
+    color: var(--color-on-navy);
+    transition: transform var(--dur-press) var(--ease-resolve);
   }
-  .tile__arrow { transition: transform var(--dur-press) var(--ease-resolve); }
-  .tile:hover .tile__arrow { transform: translateX(3px); }
+  .tile:hover > :global(.tile__arrow) { transform: translateX(3px); }
 </style>

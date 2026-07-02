@@ -25,9 +25,13 @@ export const withBase = (path: string): string =>
 
 export type TrackId = 'imaging' | 'cardiac';
 
+/**
+ * No blurb text on tracks: routing tiles carry bare track names only until
+ * exact wording is confirmed (3.6 has no confirmed blurb copy).
+ */
 export const TRACKS: Record<
   TrackId,
-  { id: TrackId; label: string; navLabel: string; href: string; icon: string; blurb: string }
+  { id: TrackId; label: string; navLabel: string; href: string; icon: string }
 > = {
   imaging: {
     id: 'imaging',
@@ -35,15 +39,13 @@ export const TRACKS: Record<
     navLabel: 'Imaging Support Services',
     href: withBase('/imaging-qc'),
     icon: 'ruler', // calibration — the imaging/QC track's fixed icon (2.4)
-    blurb: 'Mammography, MRI, and multi-site compliance — calibration and QC you can stand behind.',
   },
   cardiac: {
     id: 'cardiac',
     label: 'Cardiac Services',
     navLabel: 'Cardiac Services',
     href: withBase('/cardiac'),
-    icon: 'monitor', // broadcast/signal — NOT a heartbeat glyph (Layer 1)
-    blurb: 'Holter monitoring, CIED support, and remote monitoring — clarity quicker, refer smarter.',
+    icon: 'monitor', // monitoring — confirmed NOT a heart/heartbeat glyph (Layer 1; mock's ♥ was placeholder)
   },
 };
 

@@ -49,6 +49,16 @@ Before designing anything new, ask: does it serve Confidence → Relief → Resp
 | Background | `#F7F8FA` | Page background — cool-tinted, reduces glare-fatigue in long sessions |
 | Text | `#1A1D29` | Body copy default — navy-tinted near-black, not pure black |
 
+**On-navy palette** — exact values from the visual build reference (`beacon-visual-build-reference.html`), documented here so they live in Layer 2 rather than only in the implementation:
+
+| Role | Hex | Use |
+|---|---|---|
+| Deep panel | `#082038` | Visual-side panel background — slightly darker than Primary Navy, for depth |
+| Navy hairline | `#1A3A5C` | 0.5px navbar/footer hairlines on navy panels |
+| On-navy text | `#B5D4F4` | Nav links, sub-headline/body text on navy |
+| On-navy soft | `#85B7EB` | Stat labels, small annotations on navy |
+| On-navy faint | `#5F8AC2` | Credentials line, footer column titles on navy |
+
 **Psychological logic, in brief:** navy = audited/institutional without coldness. Amber = "this matters" without borrowing green's "healthy/normal" connotation or red's false-alarm connotation — and it ties back to the reference logo's lighthouse-beam equity even though the literal lighthouse metaphor has been retired. Off-white background and near-black (not pure black) text both serve long clinical reading sessions and keep the palette feeling like one designed system, not default values.
 
 **The amber rule — the one thing this system depends on getting right:** amber's correct shade is context-dependent.
