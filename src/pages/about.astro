@@ -1,0 +1,36 @@
+---
+/**
+ * About — its own dedicated page per review decision. Content is the confirmed
+ * 3.6.3 sentence, nothing else ("deliberately short and factual — expand only
+ * with additional specific, verifiable facts"). No label above the sentence:
+ * the page title does that job. Text uses the reference .sub treatment
+ * (15px, #B5D4F4, line-height 1.6).
+ */
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="About" description="About Beacon Diagnostics." navVariant="gateway">
+  <section class="about panel-navy">
+    <div class="grid-container">
+      <div class="col" style="--from:3;--to:11" data-reveal>
+        <h1>About</h1>
+        <p class="about__text">
+          Staff are senior clinicians in their field, with 10+ years&rsquo;
+          experience in large hospital settings.
+        </p>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .about { padding-block: var(--space-9); }
+  .about__text {
+    font-family: var(--font-body);
+    font-size: 15px; /* reference .sub treatment */
+    line-height: 1.6;
+    color: var(--color-on-navy);
+    margin-top: var(--space-5);
+    max-width: var(--measure);
+  }
+</style>

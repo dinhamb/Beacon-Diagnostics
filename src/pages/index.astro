@@ -5,10 +5,8 @@
  * confirmation-and-routing page. Centered/symmetric grid (2.3); two tracks at
  * EQUAL visual weight (6/6).
  *
- * NO hero headline yet, deliberately: 3.6 contains no confirmed gateway
- * headline copy, and nothing gets invented — the routing panel opens the page
- * until exact wording is confirmed. Copy on this page is limited to the two
- * confirmed track names and the confirmed About sentence (3.6.3).
+ * Copy: the confirmed gateway headline and the two confirmed track names —
+ * nothing else. About lives on its own page (/about) per review decision.
  */
 import Base from '../layouts/Base.astro';
 import RoutingTile from '../components/RoutingTile.astro';
@@ -20,8 +18,14 @@ import { TRACKS, TRACK_ORDER } from '../site.ts';
   description="Beacon Diagnostics — Imaging Support Services and Cardiac Services."
   navVariant="gateway"
 >
-  <!-- Routing: navy panel continuing from the nav; two tracks, equal 6/6 -->
+  <!-- Hero + routing: one navy panel continuing from the nav.
+       Headline centered/symmetric (3.1); two tracks, equal 6/6. -->
   <section class="gateway-route panel-navy">
+    <div class="grid-container">
+      <div class="col gateway-route__head" style="--from:3;--to:11" data-reveal>
+        <h1>Independent diagnostics. Straight answers.</h1>
+      </div>
+    </div>
     <div class="grid-container gateway-route__tiles">
       <div class="col" style="--from:1;--to:7" data-reveal>
         <RoutingTile
@@ -39,46 +43,13 @@ import { TRACKS, TRACK_ORDER } from '../site.ts';
       </div>
     </div>
   </section>
-
-  <!-- About — confirmed content (3.6.3), reference-exact panel treatment:
-       navy panel, 24px/28px padding, 15px #B5D4F4 text -->
-  <section class="section--tight">
-    <div class="grid-container">
-      <div class="col" style="--from:1;--to:13" data-reveal>
-        <div class="about-panel" id="about">
-          <p class="about-panel__label">about</p>
-          <p class="about-panel__text">
-            Staff are senior clinicians in their field, with 15 years&rsquo;
-            experience in large hospital settings.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
 </Base>
 
 <style>
   .gateway-route { padding-block: var(--space-9); }
+  .gateway-route__head {
+    text-align: center;
+    margin-bottom: var(--space-8);
+  }
   .gateway-route__tiles { row-gap: var(--gutter); }
-
-  .about-panel {
-    background: var(--color-navy);
-    border-radius: 12px;
-    padding: 24px 28px; /* exact reference values */
-  }
-  .about-panel__label {
-    font-family: var(--font-body);
-    font-size: 10px;
-    letter-spacing: 0.03em;
-    text-transform: uppercase;
-    color: var(--color-on-navy-faint);
-    margin-bottom: var(--space-2);
-  }
-  .about-panel__text {
-    font-family: var(--font-body);
-    font-size: 15px; /* reference .sub treatment */
-    line-height: 1.6;
-    color: var(--color-on-navy);
-    margin: 0;
-  }
 </style>

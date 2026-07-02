@@ -46,7 +46,7 @@
   --fs-small: 0.875rem;    /* 14px — captions/labels only, never paragraphs */
   --fs-cta:   0.9375rem;   /* 15px */
 
-  --lh-tight: 1.15;        /* headings */
+  --lh-tight: 1.25;        /* headings — visual reference value (md doc says 1.15; HTML wins) */
   --lh-body:  1.65;        /* long technical reading sessions */
   --ls-head:  -0.01em;
   --ls-cta:   0.02em;

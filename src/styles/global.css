@@ -34,8 +34,13 @@ body {
   /* Tabular figures everywhere by default — this brand constantly shows
      calibration values and tolerance ranges (2.2). */
   font-feature-settings: 'tnum' 1, 'cv05' 1;
+  /* Footer pins to the viewport bottom on short pages (e.g. /about). */
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
+main { flex: 1; }
+body > footer { margin-top: auto; }
 
 img, picture, svg, video {
   display: block;

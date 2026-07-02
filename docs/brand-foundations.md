@@ -197,7 +197,7 @@ The constant across both modes: every span starts and ends on a grid boundary. A
 **Structure:**
 - Logo: small mark in nav, top-left, standard size. **Not** a centerpiece treatment — the brand is pre-recognition with this audience, so the headline and the calm layout carry the confidence load, not a large lockup.
 - Headline: outcome-led, written to be **forward-safe** (works equally well for the original warm visitor and anyone they forward the page to). No reference to "reconnecting" or prior contact — that framing ages out fast as referral traffic becomes the norm rather than the exception, and it doesn't survive being forwarded.
-- Routing: two tracks presented with **equal visual weight** — "Imaging & equipment QC" and "Remote diagnostics" — neither subordinate to the other.
+- Routing: two tracks presented with **equal visual weight** — "Cardiac Services" and "Imaging Support Services" (confirmed nav arm names, see 3.4) — neither subordinate to the other.
 - Grid: centered/symmetric (per 2.3 above), not the alternating asymmetry used on service pages.
 
 **Decided, not yet rebuilt as a clean final artifact:** a warmer first-draft version was explored and explicitly rejected (see project history) — keep the gateway page neutral and forward-safe by default.
@@ -223,39 +223,88 @@ The constant across both modes: every span starts and ends on a grid boundary. A
 
 **Navigation has two states, not one — this is the key design decision.**
 
+**The two confirmed nav arms:** Cardiac Services · Imaging Support Services
+
 *Gateway page (no track active):* both service tracks named with equal visual weight in the nav, mirroring the equal-weight routing tiles below the fold. Contact is the one bordered/distinct nav item, consistent with the "one accent, one job" discipline used for the CTA system.
 
 *Service page (track active):* the flat link list is replaced by a small active-track badge (amber-tinted, with the track's icon from 2.4) — this is orientation, not a menu repeat. A visitor who has already chosen a track shouldn't see both options presented as equally undecided again. "Switch track" becomes one deliberately secondary, smaller action beside the badge, not a second equal-weight nav item.
 
-**Footer — four columns, matching the grid's quarter-divisions (Layer 2.3):** brand statement, services, company/contact, and a **trust-proof slot reserved on purpose** (see 4.3) — present and visibly empty pre-launch rather than absent. This avoids discovering later that there's "nowhere good" to place the first pilot-site mention; the placement decision is made once, now, and only the content drops in later.
+**Footer — four columns, matching the grid's quarter-divisions (Layer 2.3):** logo mark, services, company/contact, and a **trust-proof slot reserved on purpose** (see 4.3) — present and visibly empty pre-launch rather than absent. This avoids discovering later that there's "nowhere good" to place the first pilot-site mention; the placement decision is made once, now, and only the content drops in later.
+
+**No tagline / brand-statement copy in the first column.** Earlier drafts included a generic descriptive line under the logo (e.g. "Independent diagnostic precision across..."). This is deliberately removed — it's exactly the kind of unspecified slot that gets filled with generic marketing language by default. Leave this column as logo mark only until there's a specific, factual line worth adding (e.g. a location, an ABN, or nothing at all).
 
 ### 3.5 Deliberately left open — needs real content first, not a placeholder pattern
 
-These aren't oversights — building them now would mean inventing service-line specifics that don't exist yet, which produces a pattern wearing borrowed clothes rather than a real one. Build these once the underlying content is real:
+These aren't oversights — building them now would mean inventing specifics that don't exist yet, which produces a pattern wearing borrowed clothes rather than a real one. Build these once the underlying content is real:
 
-- **The diagnostics-as-a-service track's own hero (build).** Cardiac content now exists (see 3.6) — the remaining task is applying it to 3.2's hero structure (same asymmetric rhythm, same anatomy), not gathering more content. The physics/QC component of this track is explicitly out of scope for v1.
-- **Mobile-specific wireframe for the service-page hero.** Worth doing once there are at least two real heroes (imaging/QC and cardiac diagnostics) to wireframe against, so the mobile pattern is checked against more than one case.
+- **Both service-track heroes (build).** Content is now fully confirmed for both Cardiac Services and Imaging Support Services (see 3.6) — the remaining task is applying that content to 3.2's hero structure (same asymmetric rhythm, same anatomy) for each, not gathering more content.
+- **Mobile-specific wireframe for the service-page hero.** Worth doing once both real heroes exist, so the mobile pattern is checked against more than one case.
 - **Trust/social-proof population** (structure already defined in 4.3) — blocked on pilot-site results existing, as already noted.
 
-### 3.6 Confirmed content — cardiac diagnostics-as-a-service (v1, no physics/QC component)
+### 3.6 Confirmed content — both service tracks, about, and contact (v1)
 
-**Scope note:** v1 of this track is cardiac-only. Imaging/equipment physics and QC content is deliberately excluded from this track for now — it lives in the existing imaging/QC track (3.2) and is not duplicated here.
+**Content philosophy, applies to both tracks — deliberately minimal, by design choice, not by default:** both tracks intentionally omit step-by-step workflow and operational/logistics detail. That information qualifies a lead in conversation, not on the page — a deliberate trade of "explain and convince" for "name and invite contact," which still fits Layer 1's "understated-confident" descriptor as long as the page reads as *confidently* brief rather than thin. Each track's positioning line is doing most of the persuasive work as a result, and should be treated as load-bearing, not filler.
 
-**Content philosophy — deliberately minimal, by design choice, not by default:** this track intentionally omits step-by-step workflow, billing/signing mechanics, and fitting logistics. That information qualifies a lead in conversation, not on the page — a deliberate trade of "explain and convince" for "name and invite contact," which still fits Layer 1's "understated-confident" descriptor as long as the page reads as *confidently* brief rather than thin. The positioning line is doing most of the persuasive work as a result, and should be treated as load-bearing, not filler.
+**No adjective without a fact behind it — applies everywhere on the site.** Avoid "innovative," "cutting-edge," "industry-leading," "seamless," "world-class," "revolutionary," or similar unearned marketing language. If a claim can't be backed by a specific, stated fact, cut the claim rather than soften it into vaguer wording. Prefer short, plain, declarative sentences. The site's current job is to read as a real, specific, factual small business — proof that this is a genuine operation — not to persuade on its own; most persuasion currently happens in direct conversation, so the site doesn't need to (and shouldn't try to) do that work through copy. If a section seems to need more copy than is explicitly specified here, that's a signal to get the exact wording confirmed — not to generate placeholder marketing language.
+
+**Content guardrail for both tracks:** claim *capability*, never *scale* or *capacity* — e.g. it's accurate to say these services are offered; it is not accurate to imply current volume, client count, or nationwide reach. This avoids overclaiming while the business is still starting small, without requiring any qualifying language on the page that would undercut confidence.
+
+---
+
+#### 3.6.1 Cardiac Services
+
+**Scope note:** v1 of this track is cardiac-only. Imaging/equipment physics and QC content lives entirely in the Imaging Support Services track (3.6.2) and is not duplicated here.
 
 **Positioning (the load-bearing line — outcome-led, doubles as the H1 candidate per 3.2's hero anatomy):**
 > Get clarity quicker, refer smarter.
 
 This reframes the value prop from "outsource your workload to us" to "extend what a referring GP/clinic can already do, and refer onward with real diagnostic information when referral is still right." Notably uses "clarity," directly echoing the Layer 1 brand metaphor (signal resolving into a clear finding) without needing to force the connection.
 
-**Services offered (sub-headline list, equal weight per 3.2):** Holter monitoring · CIED support · Remote monitoring
+**Services offered (sub-headline list, equal weight per 3.2):** CIED support · Holter and event monitoring · Remote monitoring
 
 **Why trust us (credentials — confirmed, feeds the proof/credibility section):**
 > Co-chair and board director, International Board of Heart Rhythm Examiners
 
 **CTA:** Get in touch
 
-**Content guardrail for whoever writes final copy:** claim *capability*, never *scale* or *capacity* — e.g. it's accurate to say the three services are offered; it is not accurate to imply current volume, client count, or nationwide reach. This avoids overclaiming while the business is still starting small, without requiring any qualifying language on the page that would undercut confidence.
+---
+
+#### 3.6.2 Imaging Support Services
+
+**Scope note:** this track did not previously have confirmed content. The earlier hero mockup's headline ("Clarity you can act on, every time") was an illustrative example only, now superseded by the confirmed positioning line below.
+
+**Positioning (the load-bearing line — outcome-led, doubles as the H1 candidate per 3.2's hero anatomy):**
+> Fewer surprises, faster answers.
+
+Matches Cardiac Services' verb-led, fact-first register (3.6.1) rather than relying on evaluative adjectives — consistent with the "no adjective without a fact" rule. Speaks directly to the compliance/audit anxiety underneath the five services listed below (regulatory requirements, QC gaps, protocol drift) without naming that anxiety outright.
+
+**Services offered (sub-headline list, equal weight per 3.2):**
+- Equipment compliance testing (QLD regulatory requirements)
+- QC auditing and support
+- Quality optimisation and protocol review
+- After-hours and on-demand physicist support
+- Radiation safety advice
+
+**Why trust us (shared credentials — see 3.6.3 About):** this track can draw on the shared "About" content (senior clinicians, 10+ years' experience in large hospital settings) rather than needing separate track-specific credentials, since the imaging track doesn't yet have its own named individual credential the way cardiac does.
+
+**CTA:** Get in touch
+
+---
+
+#### 3.6.3 About
+
+**Confirmed content:**
+> Staff are senior clinicians in their field, with 10+ years' experience in large hospital settings.
+
+This is deliberately short and factual, consistent with the "no adjective without a fact" rule — it states experience and setting, nothing more. Expand only with additional specific, verifiable facts (named credentials, specific institutions, specific standards followed), not with descriptive/marketing language.
+
+#### 3.6.4 Contact
+
+**Confirmed content:**
+- Email: info@beacondiagnostics.com.au
+- Phone: 1300 255 478 (1300 ALL HRT)
+
+The phone number's letter-mnemonic form (1300 ALL HRT) is worth keeping visible alongside the numeric form wherever the number appears — it's a real, useful piece of information (easier to remember/dial), not decorative.
 
 ---
 
