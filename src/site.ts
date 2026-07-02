@@ -3,13 +3,15 @@
  * track icons (one fixed icon per track, used everywhere — Layer 2.4), and
  * contact details. Pages and chrome read from here so nothing drifts.
  *
- * Contact details below are placeholders for the real build — swap in once
- * confirmed. Nothing here claims scale or volume (Layer 3.6 guardrail).
+ * Contact details are the CONFIRMED values from Brand Foundations 3.6.4.
+ * The phone mnemonic (1300 ALL HRT) stays visible wherever the number
+ * appears — it's real information, not decoration.
  */
 export const SITE = {
   name: 'Beacon Diagnostics',
-  email: 'hello@beacondiagnostics.com',
-  phone: '+1 (000) 000-0000',
+  email: 'info@beacondiagnostics.com.au',
+  phone: '1300 255 478',
+  phoneMnemonic: '1300 ALL HRT',
 };
 
 /**
@@ -29,16 +31,16 @@ export const TRACKS: Record<
 > = {
   imaging: {
     id: 'imaging',
-    label: 'Imaging & equipment QC',
-    navLabel: 'Imaging & equipment QC',
+    label: 'Imaging Support Services',
+    navLabel: 'Imaging Support Services',
     href: withBase('/imaging-qc'),
     icon: 'ruler', // calibration — the imaging/QC track's fixed icon (2.4)
     blurb: 'Mammography, MRI, and multi-site compliance — calibration and QC you can stand behind.',
   },
   cardiac: {
     id: 'cardiac',
-    label: 'Remote diagnostics',
-    navLabel: 'Remote diagnostics',
+    label: 'Cardiac Services',
+    navLabel: 'Cardiac Services',
     href: withBase('/cardiac'),
     icon: 'monitor', // broadcast/signal — NOT a heartbeat glyph (Layer 1)
     blurb: 'Holter monitoring, CIED support, and remote monitoring — clarity quicker, refer smarter.',

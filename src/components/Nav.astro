@@ -1,15 +1,19 @@
 ---
 /**
- * Navigation — two states, not one (Layer 3.4). This is the key decision.
+ * Navigation — two states, not one (Layer 3.4), rebuilt to the visual build
+ * reference's navbar spec (dark navy bar as the top of the navy panel).
  *
- * - gateway: both tracks named with EQUAL visual weight (mirrors the equal-weight
- *   routing tiles below the fold). Contact is the one bordered/distinct item.
- * - service: the flat link list is replaced by a small active-track badge +
- *   one deliberately-secondary, smaller "Switch track" action. Orientation,
- *   not a menu repeat.
+ * - gateway: both tracks named with EQUAL visual weight; Contact is the one
+ *   bordered/distinct item ("one accent, one job").
+ * - service: the link list is replaced by the active-track badge beside the
+ *   brand (orientation, not a menu repeat) + a deliberately-secondary
+ *   "Switch track" action. Note: the switch-track action comes from the
+ *   markdown doc 3.4 — the reference mock shows only badge + contact.
  *
- * This is the ONE sticky element on the page (4.1) — never stacked with a sticky
- * CTA bar.
+ * Exact values from the reference file:
+ *   bar padding 14px 28px · bottom hairline 0.5px #1A3A5C
+ *   links 13px #B5D4F4, gap 22px · contact 11px #fff, 0.5px #3D5A80 border,
+ *   6px/14px padding, 6px radius · badge beside brand, gap 14px
  */
 import Logo from './Logo.astro';
 import Icon from './Icon.astro';
@@ -27,35 +31,29 @@ const home = withBase('/');
 ---
 
 <header class="nav" data-nav>
-  <div class="nav__inner grid-container">
-    <Logo background="light" />
+  <div class="nav__bar">
+    <div class="nav__brand">
+      <Logo background="dark" size={28} />
+      {variant === 'service' && current && (
+        <TrackBadge icon={current.icon} label={current.label} />
+      )}
+    </div>
 
     {variant === 'gateway' ? (
-      <>
-        <nav class="nav__links" aria-label="Service tracks">
-          {TRACK_ORDER.map((id) => (
-            <a class="nav__link" href={TRACKS[id].href}>{TRACKS[id].navLabel}</a>
-          ))}
-        </nav>
-        <div class="nav__end">
-          <a class="nav__contact" href={contactHref}>
-            <Icon name="mail" size={16} stroke={1.75} />
-            <span>Contact</span>
-          </a>
-        </div>
-      </>
+      <nav class="nav__links" aria-label="Primary">
+        {TRACK_ORDER.map((id) => (
+          <a class="nav__link" href={TRACKS[id].href}>{TRACKS[id].navLabel}</a>
+        ))}
+        <a class="nav__contact" href={contactHref}>contact</a>
+      </nav>
     ) : (
-      <div class="nav__service">
-        {current && <TrackBadge icon={current.icon} label={current.label} />}
+      <nav class="nav__links" aria-label="Primary">
         <a class="nav__switch" href={home}>
-          <Icon name="arrow-right" size={15} stroke={1.75} class="nav__switch-icon" />
+          <Icon name="arrow-right" size={13} stroke={1.75} class="nav__switch-icon" />
           <span>Switch track</span>
         </a>
-        <a class="nav__contact" href={contactHref}>
-          <Icon name="mail" size={16} stroke={1.75} />
-          <span>Contact</span>
-        </a>
-      </div>
+        <a class="nav__contact" href={contactHref}>contact</a>
+      </nav>
     )}
 
     <!-- mobile disclosure -->
@@ -67,97 +65,87 @@ const home = withBase('/');
 
   <!-- mobile panel -->
   <div class="nav__mobile" id="nav-mobile" data-nav-mobile hidden>
-    <div class="grid-container">
-      <div class="col">
-        {variant === 'service' && current && (
-          <div class="nav__mobile-badge"><TrackBadge icon={current.icon} label={current.label} /></div>
-        )}
-        <a class="nav__mobile-link" href={TRACKS.imaging.href}>{TRACKS.imaging.navLabel}</a>
-        <a class="nav__mobile-link" href={TRACKS.cardiac.href}>{TRACKS.cardiac.navLabel}</a>
-        {variant === 'service' && <a class="nav__mobile-link" href={home}>All services</a>}
-        <a class="nav__mobile-link nav__mobile-link--contact" href={contactHref}>
-          <Icon name="mail" size={18} stroke={1.75} /> Contact
-        </a>
-      </div>
-    </div>
+    {variant === 'service' && current && (
+      <div class="nav__mobile-badge"><TrackBadge icon={current.icon} label={current.label} /></div>
+    )}
+    <a class="nav__mobile-link" href={TRACKS.imaging.href}>{TRACKS.imaging.navLabel}</a>
+    <a class="nav__mobile-link" href={TRACKS.cardiac.href}>{TRACKS.cardiac.navLabel}</a>
+    {variant === 'service' && <a class="nav__mobile-link" href={home}>All services</a>}
+    <a class="nav__mobile-link nav__mobile-link--contact" href={contactHref}>contact</a>
   </div>
 </header>
 
 <style>
-  /* Light header — lets the full-colour logo (navy disc) read clearly. */
+  /* The bar is the top segment of the navy panel (reference: .navbar.bordered). */
   .nav {
-    position: sticky;
-    top: 0;
-    z-index: 50;
-    background: color-mix(in srgb, var(--color-bg) 90%, transparent);
-    backdrop-filter: saturate(140%) blur(8px);
-    border-bottom: 1px solid var(--color-navy-08);
+    background: var(--color-navy);
+    border-bottom: 0.5px solid var(--color-navy-hairline);
   }
-  .nav__inner {
-    align-items: center;
-    min-height: 68px;
-    /* the 12-col grid isn't needed inside the bar — use a flex row */
+  .nav__bar {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    padding: 14px 28px; /* exact reference value */
     gap: var(--space-5);
+  }
+
+  /* brand group — badge sits beside the logo, gap 14px (reference) */
+  .nav__brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
   }
 
   .nav__links {
     display: flex;
     align-items: center;
-    gap: var(--space-6);
-    margin-left: auto;
+    gap: 22px; /* exact reference value */
   }
   /* equal visual weight — neither track subordinate (3.4) */
   .nav__link {
-    font-size: var(--fs-cta);
-    font-weight: var(--weight-medium);
-    color: var(--color-navy);
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--color-on-navy);
     text-decoration: none;
-    padding: 0.5rem 0;
-    border-bottom: 2px solid transparent;
-    transition: border-color var(--dur-press) var(--ease-resolve),
-      color var(--dur-press) var(--ease-resolve);
+    transition: color var(--dur-press) var(--ease-resolve);
   }
-  .nav__link:hover { border-color: var(--color-amber); }
-  .nav__link[aria-current='page'] { border-color: var(--color-amber); }
-
-  .nav__end { display: flex; align-items: center; }
+  .nav__link:hover { color: #fff; }
 
   /* Contact — the one bordered/distinct nav item ("one accent, one job") */
   .nav__contact {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-    font-size: var(--fs-cta);
-    font-weight: var(--weight-medium);
-    color: var(--color-navy);
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 400;
+    color: #fff;
     text-decoration: none;
-    padding: 0.5rem 0.875rem;
-    border: 1px solid var(--color-slate-30);
-    border-radius: var(--radius-sm);
+    border: 0.5px solid var(--color-slate);
+    padding: 6px 14px;
+    border-radius: 6px;
+    line-height: 1.4;
     transition: border-color var(--dur-press) var(--ease-resolve),
-      background-color var(--dur-press) var(--ease-resolve);
+      background-color var(--dur-press) var(--ease-resolve),
+      transform var(--dur-press) var(--ease-resolve);
   }
-  .nav__contact:hover { border-color: var(--color-slate); background: var(--color-navy-08); }
+  .nav__contact:hover {
+    border-color: var(--color-on-navy-faint);
+    background: rgba(255, 255, 255, 0.04);
+  }
+  .nav__contact:active { transform: scale(0.98); } /* press state per 4.2 */
 
-  .nav__service {
-    display: flex;
-    align-items: center;
-    gap: var(--space-4);
-    margin-left: auto;
-  }
   /* "Switch track" — deliberately secondary and smaller (3.4) */
   .nav__switch {
     display: inline-flex;
     align-items: center;
-    gap: 0.375rem;
-    font-size: var(--fs-small);
-    color: var(--color-slate);
+    gap: 0.3rem;
+    font-size: 12px;
+    color: var(--color-on-navy-faint);
     text-decoration: none;
+    transition: color var(--dur-press) var(--ease-resolve);
   }
   .nav__switch-icon { transform: rotate(180deg); opacity: 0.8; }
-  .nav__switch:hover { color: var(--color-navy); }
+  .nav__switch:hover { color: var(--color-on-navy); }
 
   /* ---- mobile ---- */
   .nav__toggle {
@@ -166,7 +154,7 @@ const home = withBase('/');
     border: none;
     padding: 0.375rem;
     cursor: pointer;
-    color: var(--color-navy);
+    color: #fff;
   }
   .nav__toggle-open,
   .nav__toggle-close { display: inline-flex; }
@@ -175,9 +163,9 @@ const home = withBase('/');
   .nav__toggle[aria-expanded='true'] .nav__toggle-close { display: inline-flex; }
 
   .nav__mobile {
-    border-top: 1px solid var(--color-navy-08);
-    padding-block: var(--space-4) var(--space-6);
-    background: var(--color-bg);
+    border-top: 0.5px solid var(--color-navy-hairline);
+    padding: var(--space-4) 28px var(--space-6);
+    background: var(--color-navy);
   }
   .nav__mobile[hidden] { display: none; }
   .nav__mobile-badge { margin-bottom: var(--space-4); }
@@ -186,19 +174,19 @@ const home = withBase('/');
     align-items: center;
     gap: var(--space-2);
     padding: var(--space-4) 0;
-    font-size: 1.0625rem;
-    font-weight: var(--weight-medium);
-    color: var(--color-navy);
+    font-size: 1rem;
+    color: var(--color-on-navy);
     text-decoration: none;
-    border-bottom: 1px solid var(--color-navy-08);
+    border-bottom: 0.5px solid var(--color-navy-hairline);
   }
-  .nav__mobile-link--contact { color: var(--color-amber-deep); border-bottom: none; }
+  .nav__mobile-link:hover { color: #fff; }
+  .nav__mobile-link--contact { color: #fff; border-bottom: none; }
 
   @media (max-width: 880px) {
-    .nav__links,
-    .nav__end,
-    .nav__service { display: none; }
+    .nav__links { display: none; }
     .nav__toggle { display: inline-flex; }
+    .nav__bar { padding: 14px 20px; } /* mobile side margin (2.3) */
+    .nav__mobile { padding-inline: 20px; }
   }
 </style>
 

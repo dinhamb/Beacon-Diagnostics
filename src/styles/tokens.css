@@ -14,6 +14,15 @@
   --color-surface:     #FFFFFF; /* Cards / raised surfaces on the page background */
   --color-text:        #1A1D29; /* Body copy — navy-tinted near-black, not pure black */
 
+  /* On-navy palette — exact values from the visual build reference (these are
+     defined there, not in the markdown doc's Layer 2). */
+  --color-navy-deep:      #082038; /* visual-side panel bg, slightly darker than navy */
+  --color-navy-hairline:  #1A3A5C; /* 0.5px navbar/footer hairlines on navy */
+  --color-on-navy:        #B5D4F4; /* nav links, sub-headline/body text on navy */
+  --color-on-navy-soft:   #85B7EB; /* stat labels, small annotations on navy */
+  --color-on-navy-faint:  #5F8AC2; /* credentials line, footer column titles */
+  --color-amber-10:       rgba(212, 160, 23, 0.10); /* track-badge fill on navy */
+
   /* Derived, low-opacity utility tints (kept on-palette, never new hues). */
   --color-navy-08:     rgba(11, 36, 71, 0.08);
   --color-navy-12:     rgba(11, 36, 71, 0.12);
