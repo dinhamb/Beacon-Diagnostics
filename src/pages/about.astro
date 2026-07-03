@@ -1,22 +1,94 @@
 ---
 /**
- * About — its own dedicated page per review decision. Content is the confirmed
- * 3.6.3 sentence, nothing else ("deliberately short and factual — expand only
- * with additional specific, verifiable facts"). No label above the sentence:
- * the page title does that job. Text uses the reference .sub treatment
- * (15px, #B5D4F4, line-height 1.6).
+ * About — owner-supplied content in full (positioning line, founding
+ * paragraph, leadership bio, collaborative-expertise section). Replaces the
+ * earlier placeholder-short version. Wording is verbatim from the owner, not
+ * generated — the "no invented copy" rule governs content Claude drafts, not
+ * text the owner supplies directly.
+ *
+ * Structure follows the site's alternating-density rhythm (Layer 4.1): navy
+ * intro panel -> light Leadership section -> navy Collaborative Expertise
+ * panel. Centered/symmetric columns throughout (Layer 3.1's "calm page"
+ * treatment) since this is a company page, not a service page needing
+ * asymmetric proof rhythm.
  */
 import Base from '../layouts/Base.astro';
 ---
 
-<Base title="About" description="About Beacon Diagnostics." navVariant="gateway">
-  <section class="about panel-navy">
+<Base
+  title="About"
+  description="About Beacon Diagnostics — specialist expertise across cardiac diagnostics, imaging quality assurance and clinical support."
+  navVariant="gateway"
+>
+  <!-- Intro: navy panel, positioning line + founding paragraphs -->
+  <section class="about-hero panel-navy">
     <div class="grid-container">
       <div class="col" style="--from:3;--to:11" data-reveal>
-        <h1>About</h1>
-        <p class="about__text">
-          Staff are senior clinicians in their field, with 10+ years&rsquo;
-          experience in large hospital settings.
+        <h1>About Beacon Diagnostics</h1>
+        <p class="about-lead">Supporting healthcare providers with trusted diagnostic expertise.</p>
+        <p class="about-body">
+          Beacon Diagnostics was founded to provide specialist expertise across
+          cardiac diagnostics, imaging quality assurance and clinical support.
+        </p>
+        <p class="about-body">
+          We believe healthcare providers value experienced professionals who
+          combine technical excellence with practical, collaborative service.
+          Our focus is on delivering dependable solutions that improve access,
+          quality and confidence across diagnostic care.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Leadership: light section, alternating density -->
+  <section class="section about-leadership">
+    <div class="grid-container">
+      <div class="col" style="--from:3;--to:11" data-reveal>
+        <h2>Leadership</h2>
+        <h3 class="about-name">Braden Dinham</h3>
+        <p class="about-role">Founder | Cardiac Scientist</p>
+        <p class="about-body about-body--light">
+          Braden has worked across advanced cardiac diagnostics, cardiac rhythm
+          management and MRI support for patients with cardiac implantable
+          electronic devices.
+        </p>
+        <p class="about-body about-body--light">
+          He serves on the Board of Directors of the International Board of
+          Heart Rhythm Examiners and co-chairs the Certified Cardiac Device
+          Remote Monitoring Specialist (CDRMS) examination committee,
+          contributing to international standards in cardiac rhythm
+          management.
+        </p>
+        <p class="about-body about-body--light">
+          Beacon Diagnostics reflects his commitment to delivering specialist
+          diagnostic services that are practical, evidence-based and
+          dependable.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Collaborative Expertise: navy panel, alternating back -->
+  <section class="section about-collab panel-navy">
+    <div class="grid-container">
+      <div class="col" style="--from:3;--to:11" data-reveal>
+        <h2>Collaborative Expertise</h2>
+        <p class="about-body">
+          Beacon Diagnostics works with a growing network of experienced
+          healthcare professionals across cardiac science, medical physics,
+          diagnostic imaging and healthcare technology.
+        </p>
+        <p class="about-body">
+          Our collaborators hold senior clinical and technical positions
+          within Australian healthcare, bringing practical experience from
+          tertiary hospitals, specialist services and diagnostic imaging
+          providers.
+        </p>
+        <p class="about-body">
+          This collaborative model enables Beacon Diagnostics to match the
+          right expertise to each project while maintaining a consistent
+          standard of professionalism, technical excellence and clinical
+          integrity.
         </p>
       </div>
     </div>
@@ -24,13 +96,41 @@ import Base from '../layouts/Base.astro';
 </Base>
 
 <style>
-  .about { padding-block: var(--space-9); }
-  .about__text {
+  .about-hero { padding-block: var(--space-9); }
+
+  .about-lead {
     font-family: var(--font-body);
-    font-size: 15px; /* reference .sub treatment */
-    line-height: 1.6;
+    font-size: var(--fs-lead);
     color: var(--color-on-navy);
-    margin-top: var(--space-5);
+    line-height: 1.5;
+    margin-top: var(--space-4);
     max-width: var(--measure);
   }
+
+  /* Body paragraphs on navy (intro + collaborative sections) */
+  .about-body {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.65;
+    color: var(--color-on-navy);
+    max-width: var(--measure);
+    margin-top: var(--space-5);
+  }
+  .about-lead + .about-body { margin-top: var(--space-6); }
+
+  /* Body paragraphs on the light Leadership section */
+  .about-body--light { color: var(--color-text); }
+
+  .about-leadership { padding-block: var(--space-9); }
+  .about-name { margin-top: var(--space-6); }
+  .about-role {
+    font-family: var(--font-body);
+    font-size: var(--fs-cta);
+    font-weight: var(--weight-medium);
+    color: var(--color-slate);
+    margin-top: var(--space-2);
+  }
+  .about-role + .about-body { margin-top: var(--space-5); }
+
+  .about-collab { padding-block: var(--space-9); }
 </style>
