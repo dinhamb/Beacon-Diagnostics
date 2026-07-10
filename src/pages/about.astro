@@ -13,6 +13,12 @@
  * asymmetric proof rhythm.
  */
 import Base from '../layouts/Base.astro';
+
+// Leadership section is HIDDEN for now (owner: not ready for full launch).
+// Flip to true to restore it — the markup is kept intact below. When it
+// returns, the alternating rhythm is navy -> light (Leadership) -> navy;
+// while hidden the page runs navy intro -> navy Collaborative Expertise.
+const showLeadership = false;
 ---
 
 <Base
@@ -40,33 +46,36 @@ import Base from '../layouts/Base.astro';
     </div>
   </section>
 
-  <!-- Leadership: light section, alternating density -->
-  <section class="section about-leadership">
-    <div class="grid-container">
-      <div class="col" style="--from:3;--to:11" data-reveal>
-        <h2>Leadership</h2>
-        <h3 class="about-name">Braden Dinham</h3>
-        <p class="about-role">Founder | Cardiac Scientist</p>
-        <p class="about-body about-body--light">
-          Braden has worked across advanced cardiac diagnostics, cardiac rhythm
-          management and MRI support for patients with cardiac implantable
-          electronic devices.
-        </p>
-        <p class="about-body about-body--light">
-          He serves on the Board of Directors of the International Board of
-          Heart Rhythm Examiners and co-chairs the Certified Cardiac Device
-          Remote Monitoring Specialist (CDRMS) examination committee,
-          contributing to international standards in cardiac rhythm
-          management.
-        </p>
-        <p class="about-body about-body--light">
-          Beacon Diagnostics reflects his commitment to delivering specialist
-          diagnostic services that are practical, evidence-based and
-          dependable.
-        </p>
+  <!-- Leadership: light section, alternating density.
+       Hidden for now via showLeadership (owner: not ready for launch). -->
+  {showLeadership && (
+    <section class="section about-leadership">
+      <div class="grid-container">
+        <div class="col" style="--from:3;--to:11" data-reveal>
+          <h2>Leadership</h2>
+          <h3 class="about-name">Braden Dinham</h3>
+          <p class="about-role">Founder | Cardiac Scientist</p>
+          <p class="about-body about-body--light">
+            Braden has worked across advanced cardiac diagnostics, cardiac rhythm
+            management and MRI support for patients with cardiac implantable
+            electronic devices.
+          </p>
+          <p class="about-body about-body--light">
+            He serves on the Board of Directors of the International Board of
+            Heart Rhythm Examiners and co-chairs the Certified Cardiac Device
+            Remote Monitoring Specialist (CDRMS) examination committee,
+            contributing to international standards in cardiac rhythm
+            management.
+          </p>
+          <p class="about-body about-body--light">
+            Beacon Diagnostics reflects his commitment to delivering specialist
+            diagnostic services that are practical, evidence-based and
+            dependable.
+          </p>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+  )}
 
   <!-- Collaborative Expertise: navy panel, alternating back -->
   <section class="section about-collab panel-navy">
