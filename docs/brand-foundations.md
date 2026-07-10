@@ -2,6 +2,8 @@
 
 **What this document is:** the single reference for every visual, brand, and technical decision made so far. Layer 1 explains *why* (strategy/intent) — use it to check whether a new decision fits the brand before it's built. Layer 2 defines the *tokens* (exact values — color, type, grid, icons). Layer 3 shows the tokens *applied* to the two page types designed so far, as worked examples for anything new to be checked against. Layer 4 covers mobile UX, motion, trust-proof structure, and technical performance.
 
+*Synced to the built v1 site (July 2026, owner-directed): three service tracks, confirmed copy throughout, static dot-field hero motif, gateway headline.*
+
 This doc is a living reference, not a finished spec. When a new decision needs to be made (navigation, footer, a new page type), check it against Layer 1 first, then see if Layer 3 already has a comparable pattern before inventing a new one.
 
 ---
@@ -108,7 +110,7 @@ h1 {
   font-family: var(--font-heading);
   font-size: clamp(2rem, 1.4rem + 2.2vw, 3.5rem); /* 32px mobile -> 56px desktop/4K */
   font-weight: 600;
-  line-height: 1.15;
+  line-height: 1.25; /* visual build reference value (was 1.15 in earlier drafts) */
   letter-spacing: -0.01em;
 }
 
@@ -164,7 +166,7 @@ button, .cta {
 
 | Page job | Grid usage | Why |
 |---|---|---|
-| **Front gateway** (calm, fast, routes an already-warm visitor) | Mostly centered, symmetric spans — e.g. columns 3–10 (8/12) for the hero, clean 6/6 for routing tiles | Two routing options must look equally weighted; neither should appear subordinate. Asymmetry here would undercut the routing logic itself. |
+| **Front gateway** (calm, fast, routes an already-warm visitor) | Mostly centered, symmetric spans — e.g. columns 3–10 (8/12) for the hero, equal 4/4/4 for the three routing tiles | The routing options must look equally weighted; neither should appear subordinate. Asymmetry here would undercut the routing logic itself. |
 | **Service/track pages** (deeper trust-building, proof, methodology) | Deliberate, alternating asymmetry — e.g. 7/5 in one section, 5/7 in the next, 8/4 for a true sidebar further down | Different content types (narrative vs. proof/data) carry different weight at different points in the page; alternating which side is wider creates rhythm without ever leaving the 12-column grid. |
 
 The constant across both modes: every span starts and ends on a grid boundary. Asymmetry means choosing *which* combination of spans per section — never going off-grid. That discipline is what keeps "asymmetrical" from sliding into "messy."
@@ -182,7 +184,7 @@ The constant across both modes: every span starts and ends on a grid boundary. A
 | Context | Icons |
 |---|---|
 | Navigation / structural | menu, close, search, chevron-down, arrow-right, external-link |
-| Service / modality (one fixed icon per track, used consistently everywhere that track appears) | ruler/calibration (imaging & equipment QC), a monitoring icon — **not a literal heartbeat/ECG glyph**, consistent with the metaphor decision in Layer 1 (remote diagnostics), device/chip (CIED support) |
+| Service / modality (one fixed icon per track, used consistently everywhere that track appears) | ruler/calibration (Imaging Support Services), a monitoring icon — **not a literal heartbeat/ECG glyph**, consistent with the metaphor decision in Layer 1 (Cardiac Services), floor-plan/layout (Facility Design Consulting), device/chip (CIED support) |
 | Trust / status | check (verified/passed), alert-triangle (flagged — used sparingly, never decoratively), shield (compliance/security), clock (turnaround time), file-text (reports/documentation) |
 | Contact / conversion | mail, phone, calendar |
 
@@ -197,7 +199,8 @@ The constant across both modes: every span starts and ends on a grid boundary. A
 **Structure:**
 - Logo: small mark in nav, top-left, standard size. **Not** a centerpiece treatment — the brand is pre-recognition with this audience, so the headline and the calm layout carry the confidence load, not a large lockup.
 - Headline: outcome-led, written to be **forward-safe** (works equally well for the original warm visitor and anyone they forward the page to). No reference to "reconnecting" or prior contact — that framing ages out fast as referral traffic becomes the norm rather than the exception, and it doesn't survive being forwarded.
-- Routing: two tracks presented with **equal visual weight** — "Cardiac Services" and "Imaging Support Services" (confirmed nav arm names, see 3.4) — neither subordinate to the other.
+- Headline (confirmed): **"Independent diagnostics. Straight answers."** — rendered without trailing punctuation on-page per the display-headline convention (owner exception, recorded in CLAUDE.md).
+- Routing: three tracks presented with **equal visual weight** — "Imaging Support Services", "Cardiac Services" and "Facility Design Consulting" (confirmed nav arm names, see 3.4) — none subordinate to the others.
 - Grid: centered/symmetric (per 2.3 above), not the alternating asymmetry used on service pages.
 
 **Decided, not yet rebuilt as a clean final artifact:** a warmer first-draft version was explored and explicitly rejected (see project history) — keep the gateway page neutral and forward-safe by default.
@@ -217,15 +220,15 @@ The constant across both modes: every span starts and ends on a grid boundary. A
 - Sub-headline: the only place services are named, listed with equal weight
 - One primary CTA only, in Deep Amber fill with white text (the accessible variant) — never two competing amber buttons, per the "one accent, one job" rule in 2.1
 - Proof stats sit at the same baseline as the CTA — numbers build confidence faster than sentences
-- Visual: the locking-grid/calibration motif, never literal equipment photography or stock clinicians — sits outside the reading path, meant to be felt peripherally rather than read
+- Visual: the static dot-field motif (8×5 grid, slate dots with a distinct amber cluster per track — no JS, no animation; replaced the earlier locking-grid motif), never literal equipment photography or stock clinicians — sits outside the reading path, meant to be felt peripherally rather than read
 
 ### 3.4 Navigation and footer
 
 **Navigation has two states, not one — this is the key design decision.**
 
-**The two confirmed nav arms:** Cardiac Services · Imaging Support Services
+**The three confirmed nav arms:** Imaging Support Services · Cardiac Services · Facility Design Consulting
 
-*Gateway page (no track active):* both service tracks named with equal visual weight in the nav, mirroring the equal-weight routing tiles below the fold. Contact is the one bordered/distinct nav item, consistent with the "one accent, one job" discipline used for the CTA system.
+*Gateway page (no track active):* all service tracks named with equal visual weight in the nav, mirroring the equal-weight routing tiles below the fold. Contact is the one bordered/distinct nav item, consistent with the "one accent, one job" discipline used for the CTA system.
 
 *Service page (track active):* the flat link list is replaced by a small active-track badge (amber-tinted, with the track's icon from 2.4) — this is orientation, not a menu repeat. A visitor who has already chosen a track shouldn't see both options presented as equally undecided again. "Switch track" becomes one deliberately secondary, smaller action beside the badge, not a second equal-weight nav item.
 
@@ -241,7 +244,7 @@ These aren't oversights — building them now would mean inventing specifics tha
 - **Mobile-specific wireframe for the service-page hero.** Worth doing once both real heroes exist, so the mobile pattern is checked against more than one case.
 - **Trust/social-proof population** (structure already defined in 4.3) — blocked on pilot-site results existing, as already noted.
 
-### 3.6 Confirmed content — both service tracks, about, and contact (v1)
+### 3.6 Confirmed content — all three service tracks, about, and contact (v1)
 
 **Content philosophy, applies to both tracks — deliberately minimal, by design choice, not by default:** both tracks intentionally omit step-by-step workflow and operational/logistics detail. That information qualifies a lead in conversation, not on the page — a deliberate trade of "explain and convince" for "name and invite contact," which still fits Layer 1's "understated-confident" descriptor as long as the page reads as *confidently* brief rather than thin. Each track's positioning line is doing most of the persuasive work as a result, and should be treated as load-bearing, not filler.
 
@@ -293,10 +296,30 @@ Matches Cardiac Services' verb-led, fact-first register (3.6.1) rather than rely
 
 #### 3.6.3 About
 
-**Confirmed content:**
-> Staff are senior clinicians in their field, with 10+ years' experience in large hospital settings.
+About is its own page (`/about`), linked from the footer's "company" column. Confirmed content (owner-supplied, verbatim on the page):
 
-This is deliberately short and factual, consistent with the "no adjective without a fact" rule — it states experience and setting, nothing more. Expand only with additional specific, verifiable facts (named credentials, specific institutions, specific standards followed), not with descriptive/marketing language.
+> **About Beacon Diagnostics**
+> Supporting healthcare providers with trusted diagnostic expertise.
+>
+> Beacon Diagnostics was founded to provide specialist expertise across cardiac diagnostics, imaging quality assurance and clinical support.
+>
+> We believe healthcare providers value experienced professionals who combine technical excellence with practical, collaborative service. Our focus is on delivering dependable solutions that improve access, quality and confidence across diagnostic care.
+
+> **Leadership — Braden Dinham, Founder | Cardiac Scientist**
+> Braden has worked across advanced cardiac diagnostics, cardiac rhythm management and MRI support for patients with cardiac implantable electronic devices.
+>
+> He serves on the Board of Directors of the International Board of Heart Rhythm Examiners and co-chairs the Certified Cardiac Device Remote Monitoring Specialist (CDRMS) examination committee, contributing to international standards in cardiac rhythm management.
+>
+> Beacon Diagnostics reflects his commitment to delivering specialist diagnostic services that are practical, evidence-based and dependable.
+
+> **Collaborative Expertise**
+> Beacon Diagnostics works with a growing network of experienced healthcare professionals across cardiac science, medical physics, diagnostic imaging and healthcare technology.
+>
+> Our collaborators hold senior clinical and technical positions within Australian healthcare, bringing practical experience from tertiary hospitals, specialist services and diagnostic imaging providers.
+>
+> This collaborative model enables Beacon Diagnostics to match the right expertise to each project while maintaining a consistent standard of professionalism, technical excellence and clinical integrity.
+
+**Build note:** the Leadership section is currently HIDDEN on the live page (owner: not ready for full launch) behind a `showLeadership` flag in `about.astro`; the copy above stays confirmed and restores with one flag flip.
 
 #### 3.6.4 Contact
 
@@ -305,6 +328,22 @@ This is deliberately short and factual, consistent with the "no adjective withou
 - Phone: 1300 255 478 (1300 ALL HRT)
 
 The phone number's letter-mnemonic form (1300 ALL HRT) is worth keeping visible alongside the numeric form wherever the number appears — it's a real, useful piece of information (easier to remember/dial), not decorative.
+
+---
+
+#### 3.6.5 Facility Design Consulting
+
+**Positioning (the load-bearing line — outcome-led, the H1):**
+> Clinical flow, built in.
+
+Rendered on-page with a line break after the comma and no trailing punctuation, matching the other track headlines.
+
+**Scope (sub-headline list, equal weight per 3.2):** New builds · Refurbishments · Reconfiguration for new equipment
+
+**Supporting line (confirmed, sits in the credentials-line slot):**
+> Supporting good decision-making on design and resultant workflows. Whether it's mixed-use departments or highly specialised clinical areas, our expertise brings clarity to design decisions.
+
+**CTA:** Get in touch
 
 ---
 
