@@ -73,7 +73,11 @@ const telHref = `tel:${SITE.phone.replace(/\s/g, '')}`;
       </span>
       <div class="footer__legal">
         <span>&copy; {year} beacon diagnostics</span>
-        <span>privacy &middot; terms</span>
+        <span>
+          <a class="footer__bottom-link" href={withBase('/privacy')}>privacy</a>
+          &middot;
+          <a class="footer__bottom-link" href={withBase('/terms')}>terms</a>
+        </span>
       </div>
     </div>
   </div>

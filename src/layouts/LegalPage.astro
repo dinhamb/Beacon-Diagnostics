@@ -1,0 +1,69 @@
+---
+/**
+ * LegalPage — shared shell for /privacy and /terms so the two stay consistent.
+ * Navy title panel (calm, per 3.1) over a light reading column; body content
+ * is passed as the slot. Section headings use the site's serif automatically.
+ *
+ * Legal copy is deliberately plain and scoped to THIS WEBSITE only (owner
+ * decision): the site uses no cookies, analytics, or forms, so the policy can
+ * state that truthfully. Not legal advice — a standard template.
+ */
+import Base from './Base.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  lastUpdated: string;
+}
+const { title, description, lastUpdated } = Astro.props;
+---
+
+<Base title={title} description={description} navVariant="gateway">
+  <section class="legal-hero panel-navy">
+    <div class="grid-container">
+      <div class="col" style="--from:3;--to:11" data-reveal>
+        <h1>{title}</h1>
+        <p class="legal-updated">Last updated {lastUpdated}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section legal-body">
+    <div class="grid-container">
+      <div class="col legal-prose" style="--from:3;--to:11" data-reveal>
+        <slot />
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .legal-hero { padding-block: var(--space-8); }
+  .legal-updated {
+    font-family: var(--font-body);
+    font-size: var(--fs-small);
+    color: var(--color-on-navy-faint);
+    margin-top: var(--space-3);
+  }
+
+  /* Readable single column; generous rhythm between clauses. */
+  .legal-prose { max-width: var(--measure); }
+  .legal-prose :global(h2) {
+    font-size: var(--fs-h3);
+    margin-top: var(--space-7);
+    margin-bottom: var(--space-3);
+  }
+  .legal-prose :global(h2:first-child) { margin-top: 0; }
+  .legal-prose :global(p) {
+    font-size: 1rem;
+    line-height: var(--lh-body);
+    color: var(--color-text);
+    margin-top: var(--space-3);
+  }
+  .legal-prose :global(a) {
+    color: var(--color-slate);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .legal-prose :global(a:hover) { color: var(--color-navy); }
+</style>

@@ -1,0 +1,74 @@
+---
+/**
+ * Privacy Policy — scoped to this website (owner decision). Accurate to the
+ * built site: no cookies, no analytics, no forms, self-hosted fonts, no
+ * third-party embeds. Standard Australian small-business framing (Privacy Act
+ * 1988 / APPs). Not legal advice.
+ */
+import LegalPage from '../layouts/LegalPage.astro';
+import { SITE } from '../site.ts';
+---
+
+<LegalPage
+  title="Privacy Policy"
+  description="How Beacon Diagnostics handles information in connection with this website."
+  lastUpdated="10 July 2026"
+>
+  <p>
+    This Privacy Policy explains how Beacon Diagnostics handles information in
+    connection with this website (beacondiagnostics.com.au). We are committed to
+    protecting your privacy and handle personal information in line with the
+    Privacy Act 1988 (Cth) and the Australian Privacy Principles.
+  </p>
+
+  <h2>Information this website collects</h2>
+  <p>
+    This website does not use cookies, analytics, or tracking technologies, and
+    it does not contain any forms. It does not collect personal information from
+    you as you browse.
+  </p>
+
+  <h2>Hosting and server logs</h2>
+  <p>
+    This site is hosted on GitHub Pages. As with most web hosting, our hosting
+    provider may automatically process standard technical information — such as
+    your IP address, browser type, and the date and time of requests — for the
+    purpose of serving and securing the website. That information is handled
+    under the hosting provider&rsquo;s own privacy terms.
+  </p>
+
+  <h2>Information you provide directly</h2>
+  <p>
+    If you contact us by email or telephone, we receive the information you
+    choose to provide — such as your name, contact details, and the content of
+    your message. We use this only to respond to you and to provide our
+    services. We do not sell or rent your information, and we do not share it
+    except where necessary to provide a service you have requested or where
+    required by law.
+  </p>
+
+  <h2>Holding and securing information</h2>
+  <p>
+    We keep personal information only for as long as it is needed for the
+    purpose it was provided, and take reasonable steps to keep it secure.
+  </p>
+
+  <h2>Access and correction</h2>
+  <p>
+    You may request access to, or correction of, any personal information we
+    hold about you by contacting us using the details below.
+  </p>
+
+  <h2>Changes to this policy</h2>
+  <p>
+    We may update this policy from time to time. The current version is always
+    the one published on this page, with the &ldquo;last updated&rdquo; date
+    shown above.
+  </p>
+
+  <h2>Contact</h2>
+  <p>
+    Email: <a href={`mailto:${SITE.email}`}>{SITE.email}</a><br />
+    Phone: {SITE.phone} ({SITE.phoneMnemonic})
+  </p>
+</LegalPage>

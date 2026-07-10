@@ -1,0 +1,68 @@
+---
+/**
+ * Terms of Use — for this website. Standard Australian small-business framing,
+ * governing law Queensland (owner-confirmed). Includes the healthcare
+ * disclaimer: site content is informational, not clinical advice. Preserves
+ * non-excludable Australian Consumer Law rights. Not legal advice.
+ */
+import LegalPage from '../layouts/LegalPage.astro';
+import { SITE } from '../site.ts';
+---
+
+<LegalPage
+  title="Terms of Use"
+  description="The terms that apply to your use of the Beacon Diagnostics website."
+  lastUpdated="10 July 2026"
+>
+  <p>
+    These terms apply to your use of this website (beacondiagnostics.com.au). By
+    using the site, you agree to them.
+  </p>
+
+  <h2>Information only, not clinical advice</h2>
+  <p>
+    The content of this website is provided for general information about Beacon
+    Diagnostics and the services we offer. It is not medical, clinical, or
+    professional advice, and should not be relied upon as such. Engagement of
+    our services is arranged directly and is governed by any separate agreement
+    we enter into with you.
+  </p>
+
+  <h2>Accuracy and availability</h2>
+  <p>
+    We prepare the content of this site in good faith and aim to keep it
+    accurate and current. However, we provide it on an &ldquo;as is&rdquo; basis
+    and do not warrant that it will be error-free or continuously available.
+  </p>
+
+  <h2>Intellectual property</h2>
+  <p>
+    The content, design, and branding of this website — including the Beacon
+    Diagnostics name and logo — are owned by Beacon Diagnostics unless otherwise
+    stated. You may not reproduce or reuse them without our permission.
+  </p>
+
+  <h2>Liability</h2>
+  <p>
+    To the extent permitted by law, Beacon Diagnostics is not liable for any
+    loss or damage arising from your use of, or reliance on, this website.
+    Nothing in these terms excludes rights you have under the Australian
+    Consumer Law that cannot lawfully be excluded.
+  </p>
+
+  <h2>Governing law</h2>
+  <p>These terms are governed by the laws of Queensland, Australia.</p>
+
+  <h2>Changes to these terms</h2>
+  <p>
+    We may update these terms from time to time. The current version is always
+    the one published on this page, with the &ldquo;last updated&rdquo; date
+    shown above.
+  </p>
+
+  <h2>Contact</h2>
+  <p>
+    Email: <a href={`mailto:${SITE.email}`}>{SITE.email}</a><br />
+    Phone: {SITE.phone} ({SITE.phoneMnemonic})
+  </p>
+</LegalPage>
