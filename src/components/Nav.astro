@@ -1,19 +1,20 @@
 ---
 /**
- * Navigation — two states, not one (Layer 3.4), rebuilt to the visual build
- * reference's navbar spec (dark navy bar as the top of the navy panel).
+ * Navigation — condensed into a single menu disclosure at all widths (owner
+ * request: condense the header links into a hamburger/dropdown).
  *
- * - gateway: both tracks named with EQUAL visual weight; Contact is the one
- *   bordered/distinct item ("one accent, one job").
- * - service: the link list is replaced by the active-track badge beside the
- *   brand (orientation, not a menu repeat) + a deliberately-secondary
- *   "Switch track" action. Note: the switch-track action comes from the
- *   markdown doc 3.4 — the reference mock shows only badge + contact.
+ * Built on a native <details>/<summary> disclosure so it opens and closes
+ * WITHOUT JavaScript — progressive enhancement (Layer 4.4). The small script
+ * only adds niceties (close on Escape, outside-click, and link-choice); with
+ * JS off, the browser's native disclosure still works and every link stays
+ * reachable.
  *
- * Exact values from the reference file:
- *   bar padding 14px 28px · bottom hairline 0.5px #1A3A5C
- *   links 13px #B5D4F4, gap 22px · contact 11px #fff, 0.5px #3D5A80 border,
- *   6px/14px padding, 6px radius · badge beside brand, gap 14px
+ * Bar: brand (logo + active-track badge on service pages) on the left, the
+ * menu on the right. The menu holds the track links, an "All services" link
+ * on service pages, and Contact. Sticky — the ONE sticky element (4.1).
+ *
+ * Note: this condenses the equal-weight track links behind a menu, a
+ * deliberate divergence from 3.4's always-visible nav arms (owner request).
  */
 import Logo from './Logo.astro';
 import Icon from './Icon.astro';
@@ -39,46 +40,31 @@ const home = withBase('/');
       )}
     </div>
 
-    {variant === 'gateway' ? (
-      <nav class="nav__links" aria-label="Primary">
+    <!-- Native disclosure: works with JS disabled. -->
+    <details class="nav__menu" data-nav-menu>
+      <summary class="nav__summary" aria-label="Menu">
+        <span class="nav__summary-open"><Icon name="menu" size={24} /></span>
+        <span class="nav__summary-close"><Icon name="close" size={24} /></span>
+      </summary>
+
+      <nav class="nav__panel" aria-label="Primary">
         {TRACK_ORDER.map((id) => (
-          <a class="nav__link" href={TRACKS[id].href}>{TRACKS[id].navLabel}</a>
+          <a class="nav__panel-link" href={TRACKS[id].href}>{TRACKS[id].navLabel}</a>
         ))}
-        <a class="nav__contact" href={contactHref}>contact</a>
-      </nav>
-    ) : (
-      <nav class="nav__links" aria-label="Primary">
-        <a class="nav__switch" href={home}>
-          <Icon name="arrow-right" size={13} stroke={1.75} class="nav__switch-icon" />
-          <span>Switch track</span>
+        {variant === 'service' && (
+          <a class="nav__panel-link nav__panel-link--muted" href={home}>All services</a>
+        )}
+        <a class="nav__panel-link nav__panel-link--contact" href={contactHref}>
+          <Icon name="mail" size={16} stroke={1.75} /> Contact
         </a>
-        <a class="nav__contact" href={contactHref}>contact</a>
       </nav>
-    )}
-
-    <!-- mobile disclosure -->
-    <button class="nav__toggle" data-nav-toggle aria-expanded="false" aria-controls="nav-mobile" aria-label="Menu">
-      <span class="nav__toggle-open"><Icon name="menu" size={24} /></span>
-      <span class="nav__toggle-close"><Icon name="close" size={24} /></span>
-    </button>
-  </div>
-
-  <!-- mobile panel -->
-  <div class="nav__mobile" id="nav-mobile" data-nav-mobile hidden>
-    {variant === 'service' && current && (
-      <div class="nav__mobile-badge"><TrackBadge icon={current.icon} label={current.label} /></div>
-    )}
-    {TRACK_ORDER.map((id) => (
-      <a class="nav__mobile-link" href={TRACKS[id].href}>{TRACKS[id].navLabel}</a>
-    ))}
-    {variant === 'service' && <a class="nav__mobile-link" href={home}>All services</a>}
-    <a class="nav__mobile-link nav__mobile-link--contact" href={contactHref}>contact</a>
+    </details>
   </div>
 </header>
 
 <style>
   /* The bar is the top segment of the navy panel (reference: .navbar.bordered).
-     Sticky — the ONE sticky element on the page (4.1), per review decision. */
+     Sticky — the ONE sticky element on the page (4.1). */
   .nav {
     position: sticky;
     top: 0;
@@ -102,129 +88,112 @@ const home = withBase('/');
     min-width: 0;
   }
 
-  .nav__links {
-    display: flex;
-    align-items: center;
-    gap: 22px; /* exact reference value */
+  /* ---- disclosure menu ---- */
+  .nav__menu {
+    position: relative;
   }
-  /* equal visual weight — neither track subordinate (3.4) */
-  .nav__link {
-    font-family: var(--font-body);
-    font-size: 13px;
-    font-weight: 400;
-    color: var(--color-on-navy);
-    text-decoration: none;
-    transition: color var(--dur-press) var(--ease-resolve);
-  }
-  .nav__link:hover { color: #fff; }
 
-  /* Contact — the one bordered/distinct nav item ("one accent, one job").
-     Sized to the markdown doc's CTA spec (15px/500) per review decision,
-     not the mock's 11px. */
-  .nav__contact {
-    font-family: var(--font-body);
-    font-size: var(--fs-cta);
-    font-weight: var(--weight-medium);
-    letter-spacing: var(--ls-cta);
-    color: #fff;
-    text-decoration: none;
-    border: 0.5px solid var(--color-slate);
-    padding: 6px 14px;
-    border-radius: 6px;
-    line-height: 1.4;
-    transition: border-color var(--dur-press) var(--ease-resolve),
-      background-color var(--dur-press) var(--ease-resolve),
-      transform var(--dur-press) var(--ease-resolve);
-  }
-  .nav__contact:hover {
-    border-color: var(--color-on-navy-faint);
-    background: rgba(255, 255, 255, 0.04);
-  }
-  .nav__contact:active { transform: scale(0.98); } /* press state per 4.2 */
-
-  /* "Switch track" — deliberately secondary and smaller (3.4) */
-  .nav__switch {
+  /* Summary = the hamburger button. Strip the native marker. */
+  .nav__summary {
     display: inline-flex;
     align-items: center;
-    gap: 0.3rem;
-    font-size: 12px;
-    color: var(--color-on-navy-faint);
-    text-decoration: none;
-    transition: color var(--dur-press) var(--ease-resolve);
-  }
-  .nav__switch-icon { transform: rotate(180deg); opacity: 0.8; }
-  .nav__switch:hover { color: var(--color-on-navy); }
-
-  /* ---- mobile ---- */
-  .nav__toggle {
-    display: none;
-    background: none;
-    border: none;
     padding: 0.375rem;
     cursor: pointer;
     color: #fff;
+    list-style: none;
+    border-radius: var(--radius-sm);
+    transition: color var(--dur-press) var(--ease-resolve);
   }
-  .nav__toggle-open,
-  .nav__toggle-close { display: inline-flex; }
-  .nav__toggle-close { display: none; }
-  .nav__toggle[aria-expanded='true'] .nav__toggle-open { display: none; }
-  .nav__toggle[aria-expanded='true'] .nav__toggle-close { display: inline-flex; }
+  .nav__summary::-webkit-details-marker { display: none; }
+  .nav__summary:hover { color: var(--color-on-navy); }
+  .nav__summary-open,
+  .nav__summary-close { display: inline-flex; }
+  .nav__summary-close { display: none; }
+  .nav__menu[open] .nav__summary-open { display: none; }
+  .nav__menu[open] .nav__summary-close { display: inline-flex; }
 
-  .nav__mobile {
-    border-top: 0.5px solid var(--color-navy-hairline);
-    padding: var(--space-4) 28px var(--space-6);
+  /* Panel = a compact dropdown card, right-anchored under the hamburger,
+     overlaying content (absolute) rather than pushing it down. */
+  .nav__panel {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    min-width: 220px;
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-2);
     background: var(--color-navy);
+    border: 0.5px solid var(--color-navy-hairline);
+    border-radius: var(--radius);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
   }
-  .nav__mobile[hidden] { display: none; }
-  .nav__mobile-badge { margin-bottom: var(--space-4); }
-  .nav__mobile-link {
+  .nav__panel-link {
     display: flex;
     align-items: center;
     gap: var(--space-2);
-    padding: var(--space-4) 0;
-    font-size: 1rem;
+    padding: 0.625rem 0.75rem;
+    font-family: var(--font-body);
+    font-size: 14px;
     color: var(--color-on-navy);
     text-decoration: none;
-    border-bottom: 0.5px solid var(--color-navy-hairline);
+    border-radius: var(--radius-sm);
+    transition: color var(--dur-press) var(--ease-resolve),
+      background-color var(--dur-press) var(--ease-resolve);
   }
-  .nav__mobile-link:hover { color: #fff; }
-  .nav__mobile-link--contact { color: #fff; border-bottom: none; }
+  .nav__panel-link:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.05);
+  }
+  .nav__panel-link--muted { color: var(--color-on-navy-faint); }
+  /* Contact — the one distinct item ("one accent, one job"), set off by a
+     hairline above it. */
+  .nav__panel-link--contact {
+    margin-top: var(--space-2);
+    padding-top: 0.75rem;
+    color: #fff;
+    font-weight: var(--weight-medium);
+    border-top: 0.5px solid var(--color-navy-hairline);
+    border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+  }
 
   @media (max-width: 880px) {
-    .nav__links { display: none; }
-    .nav__toggle { display: inline-flex; }
     .nav__bar { padding: 14px 20px; } /* mobile side margin (2.3) */
-    .nav__mobile { padding-inline: 20px; }
   }
 </style>
 
 <script>
-  // Mobile menu disclosure. Tiny, per-route island — the only JS the nav ships.
+  // Progressive enhancement only — the <details> menu already opens/closes
+  // natively without this. Here we add: close on Escape, close when clicking
+  // outside, and close after choosing a link (needed because view transitions
+  // swap the DOM without a full reload). Bound once at document level and
+  // guarded, so it survives astro:page-load re-runs.
   function initNav() {
-    const toggle = document.querySelector<HTMLButtonElement>('[data-nav-toggle]');
-    const panel = document.querySelector<HTMLElement>('[data-nav-mobile]');
-    if (!toggle || !panel) return;
-    // Guard against double-binding: this module runs at load AND on
-    // astro:page-load (which also fires on the initial load), which would
-    // otherwise attach two click listeners and cancel each other out.
-    if (toggle.dataset.bound) return;
-    toggle.dataset.bound = '1';
-    const setOpen = (open: boolean) => {
-      toggle.setAttribute('aria-expanded', String(open));
-      panel.hidden = !open;
-    };
-    toggle.addEventListener('click', () => {
-      setOpen(toggle.getAttribute('aria-expanded') !== 'true');
-    });
-    // Close on escape / when a link is chosen.
-    panel.addEventListener('click', (e) => {
-      if ((e.target as HTMLElement).closest('a')) setOpen(false);
-    });
+    if ((document as any).__navBound) return;
+    (document as any).__navBound = true;
+
+    const currentMenu = () =>
+      document.querySelector<HTMLDetailsElement>('[data-nav-menu][open]');
+
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') setOpen(false);
+      if (e.key === 'Escape') {
+        const menu = currentMenu();
+        if (menu) menu.open = false;
+      }
+    });
+
+    document.addEventListener('click', (e) => {
+      const menu = currentMenu();
+      if (!menu) return;
+      const target = e.target as HTMLElement;
+      // Close when a link inside the panel is chosen…
+      if (target.closest('.nav__panel a')) {
+        menu.open = false;
+        return;
+      }
+      // …or when the click lands outside the menu entirely.
+      if (!target.closest('[data-nav-menu]')) menu.open = false;
     });
   }
   initNav();
-  // Re-bind after Astro view transitions swap the DOM.
   document.addEventListener('astro:page-load', initNav);
 </script>
