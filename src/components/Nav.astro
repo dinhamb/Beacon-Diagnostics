@@ -68,8 +68,9 @@ const home = withBase('/');
     {variant === 'service' && current && (
       <div class="nav__mobile-badge"><TrackBadge icon={current.icon} label={current.label} /></div>
     )}
-    <a class="nav__mobile-link" href={TRACKS.imaging.href}>{TRACKS.imaging.navLabel}</a>
-    <a class="nav__mobile-link" href={TRACKS.cardiac.href}>{TRACKS.cardiac.navLabel}</a>
+    {TRACK_ORDER.map((id) => (
+      <a class="nav__mobile-link" href={TRACKS[id].href}>{TRACKS[id].navLabel}</a>
+    ))}
     {variant === 'service' && <a class="nav__mobile-link" href={home}>All services</a>}
     <a class="nav__mobile-link nav__mobile-link--contact" href={contactHref}>contact</a>
   </div>

@@ -1,0 +1,33 @@
+---
+/**
+ * Facility Design Consulting — third track (owner decision, added after the
+ * original two-track build; the brand doc still describes a two-track
+ * architecture — flagged to owner rather than edited).
+ *
+ * Same hero-only anatomy as the other tracks. NO confirmed outcome-led
+ * positioning line exists yet, so the H1 is the track name for now — swap in
+ * a positioning line when the owner confirms wording. Scope list and the
+ * supporting line derive from the owner's brief: new builds, refurbs,
+ * reconfiguration for new equipment; supporting good decision-making on
+ * design and end workflows; example projects cath lab installation,
+ * mixed-use department design, imaging site design.
+ */
+import Base from '../layouts/Base.astro';
+import TrackHero from '../components/TrackHero.astro';
+
+const sub =
+  'New builds &nbsp;&middot;&nbsp; Refurbishments &nbsp;&middot;&nbsp; Reconfiguration for new equipment';
+const cred =
+  'Supporting good decision-making on design and end workflows. Example projects: cath lab installation, mixed-use department design, imaging site design.';
+---
+
+<Base
+  title="Facility Design Consulting"
+  description="Facility Design Consulting — design and workflow support for new builds, refurbishments and reconfiguration for new equipment."
+  navVariant="service"
+  activeTrack="facility"
+>
+  <TrackHero variant="facility" sub={sub} cred={cred}>
+    Facility Design Consulting
+  </TrackHero>
+</Base>

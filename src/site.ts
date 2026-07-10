@@ -23,7 +23,7 @@ const BASE = import.meta.env.BASE_URL.replace(/\/$/, ''); // '' locally, '/Beaco
 export const withBase = (path: string): string =>
   path === '/' ? `${BASE}/` : `${BASE}${path.startsWith('/') ? '' : '/'}${path}`;
 
-export type TrackId = 'imaging' | 'cardiac';
+export type TrackId = 'imaging' | 'cardiac' | 'facility';
 
 /**
  * No blurb text on tracks: routing tiles carry bare track names only until
@@ -47,6 +47,13 @@ export const TRACKS: Record<
     href: withBase('/cardiac'),
     icon: 'monitor', // monitoring — confirmed NOT a heart/heartbeat glyph (Layer 1; mock's ♥ was placeholder)
   },
+  facility: {
+    id: 'facility',
+    label: 'Facility Design Consulting',
+    navLabel: 'Facility Design Consulting',
+    href: withBase('/facility-design'),
+    icon: 'layout', // floor-plan glyph — the facility track's fixed icon (2.4)
+  },
 };
 
-export const TRACK_ORDER: TrackId[] = ['imaging', 'cardiac'];
+export const TRACK_ORDER: TrackId[] = ['imaging', 'cardiac', 'facility'];

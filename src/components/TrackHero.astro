@@ -19,21 +19,25 @@
 import { SITE } from '../site.ts';
 
 interface Props {
-  variant: 'imaging' | 'cardiac';
+  variant: 'imaging' | 'cardiac' | 'facility';
   sub: string;
   cred?: string;
 }
 const { variant, sub, cred } = Astro.props;
 const contactHref = `mailto:${SITE.email}`;
 
-// Exact amber-cluster positions and captions from the reference build note.
+// Amber-cluster positions and captions. Imaging/cardiac are exact reference
+// build-note values; facility follows the same system (a distinct loose
+// cluster per track) — a compact block, reading as a footprint/floor plan.
 const AMBER: Record<Props['variant'], number[]> = {
   imaging: [12, 13, 21, 22, 29, 30], // loose diagonal cluster
   cardiac: [3, 11, 19, 20, 28], // upper-right-leaning cluster
+  facility: [18, 19, 26, 27, 35], // compact block cluster
 };
 const CAPTION: Record<Props['variant'], string> = {
   imaging: 'signal, resolved',
   cardiac: 'clarity, resolved',
+  facility: 'design, resolved',
 };
 const dots = Array.from({ length: 40 }, (_, i) => AMBER[variant].includes(i));
 ---

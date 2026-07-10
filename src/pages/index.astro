@@ -2,10 +2,11 @@
 /**
  * Front gateway (Layer 3.1). Job: confirm credibility fast and route an
  * already-warm visitor to the right track. Not a persuasion page — a
- * confirmation-and-routing page. Centered/symmetric grid (2.3); two tracks at
- * EQUAL visual weight (6/6).
+ * confirmation-and-routing page. Centered/symmetric grid (2.3); three tracks
+ * at EQUAL visual weight (4/4/4 — still symmetric quarters of the 12-col
+ * grid, per the equal-weight routing rule).
  *
- * Copy: the confirmed gateway headline and the two confirmed track names —
+ * Copy: the confirmed gateway headline and the confirmed track names —
  * nothing else. About lives on its own page (/about) per review decision.
  */
 import Base from '../layouts/Base.astro';
@@ -15,11 +16,11 @@ import { TRACKS, TRACK_ORDER } from '../site.ts';
 
 <Base
   title="Beacon Diagnostics"
-  description="Beacon Diagnostics — Imaging Support Services and Cardiac Services."
+  description="Beacon Diagnostics — Imaging Support Services, Cardiac Services and Facility Design Consulting."
   navVariant="gateway"
 >
   <!-- Hero + routing: one navy panel continuing from the nav.
-       Headline centered/symmetric (3.1); two tracks, equal 6/6. -->
+       Headline centered/symmetric (3.1); three tracks, equal 4/4/4. -->
   <section class="gateway-route panel-navy">
     <div class="grid-container">
       <div class="col gateway-route__head" style="--from:3;--to:11" data-reveal>
@@ -27,20 +28,11 @@ import { TRACKS, TRACK_ORDER } from '../site.ts';
       </div>
     </div>
     <div class="grid-container gateway-route__tiles">
-      <div class="col" style="--from:1;--to:7" data-reveal>
-        <RoutingTile
-          href={TRACKS[TRACK_ORDER[0]].href}
-          icon={TRACKS[TRACK_ORDER[0]].icon}
-          title={TRACKS[TRACK_ORDER[0]].label}
-        />
-      </div>
-      <div class="col" style="--from:7;--to:13" data-reveal>
-        <RoutingTile
-          href={TRACKS[TRACK_ORDER[1]].href}
-          icon={TRACKS[TRACK_ORDER[1]].icon}
-          title={TRACKS[TRACK_ORDER[1]].label}
-        />
-      </div>
+      {TRACK_ORDER.map((id, i) => (
+        <div class="col" style={`--from:${1 + i * 4};--to:${5 + i * 4}`} data-reveal>
+          <RoutingTile href={TRACKS[id].href} icon={TRACKS[id].icon} title={TRACKS[id].label} />
+        </div>
+      ))}
     </div>
   </section>
 </Base>
