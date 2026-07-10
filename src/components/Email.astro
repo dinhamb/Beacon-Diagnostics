@@ -1,0 +1,45 @@
+---
+/**
+ * Email — renders a mailto link with the address HTML-entity-encoded in BOTH
+ * the visible text and the href. It still renders as the real address, is
+ * copyable, and works with JavaScript disabled — but naive scrapers reading
+ * the raw HTML see decimal character references (no literal "@"), so the
+ * common regex harvesters don't match. Not bulletproof against a determined
+ * scraper, but a zero-cost deterrent that keeps the site dependency-free
+ * (owner decision — no third-party form).
+ *
+ * Rendered via set:html so the `&#…;` references survive to the output rather
+ * than being re-escaped as `&amp;#…;` (which browsers wouldn't decode).
+ *
+ * Props:
+ *   class    — classes for the anchor
+ *   label    — visible text override (e.g. "Contact"); default shows the address
+ *   withIcon — prefix the mail glyph (matches Icon.astro's mail path)
+ */
+import { SITE } from '../site.ts';
+
+interface Props {
+  class?: string;
+  label?: string;
+  withIcon?: boolean;
+}
+const { class: cls = '', label, withIcon = false } = Astro.props;
+
+const enc = (s: string) =>
+  [...s].map((c) => `&#${c.codePointAt(0)};`).join('');
+const encoded = enc(SITE.email);
+const safeCls = cls.replace(/"/g, '');
+
+const icon = withIcon
+  ? '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="email__icon"><path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z" /><path d="M3 7l9 6l9 -6" /></svg>'
+  : '';
+// Visible text: the address (encoded) unless a plain label is supplied.
+const text = label ? label.replace(/</g, '&lt;') : encoded;
+const html = `<a class="${safeCls}" href="mailto:${encoded}">${icon}${text}</a>`;
+---
+
+<Fragment set:html={html} />
+
+<style is:global>
+  .email__icon { flex: none; display: inline-block; vertical-align: middle; }
+</style>

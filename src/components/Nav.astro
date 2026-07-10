@@ -18,8 +18,9 @@
  */
 import Logo from './Logo.astro';
 import Icon from './Icon.astro';
+import Email from './Email.astro';
 import TrackBadge from './TrackBadge.astro';
-import { SITE, TRACKS, TRACK_ORDER, withBase, type TrackId } from '../site.ts';
+import { TRACKS, TRACK_ORDER, withBase, type TrackId } from '../site.ts';
 
 interface Props {
   variant?: 'gateway' | 'service';
@@ -27,7 +28,6 @@ interface Props {
 }
 const { variant = 'gateway', active } = Astro.props;
 const current = active ? TRACKS[active] : null;
-const contactHref = `mailto:${SITE.email}`;
 const home = withBase('/');
 ---
 
@@ -54,9 +54,7 @@ const home = withBase('/');
         {variant === 'service' && (
           <a class="nav__panel-link nav__panel-link--muted" href={home}>All services</a>
         )}
-        <a class="nav__panel-link nav__panel-link--contact" href={contactHref}>
-          <Icon name="mail" size={16} stroke={1.75} /> Contact
-        </a>
+        <Email class="nav__panel-link nav__panel-link--contact" label="Contact" withIcon />
       </nav>
     </details>
   </div>
@@ -127,7 +125,10 @@ const home = withBase('/');
     border-radius: var(--radius);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
   }
-  .nav__panel-link {
+  /* :global — the Contact item is rendered by <Email> via set:html, which
+     doesn't receive Astro's scoped-style attribute; global rules reach it
+     (and the in-template track links match too, harmlessly). */
+  :global(.nav__panel-link) {
     display: flex;
     align-items: center;
     gap: var(--space-2);
@@ -140,14 +141,14 @@ const home = withBase('/');
     transition: color var(--dur-press) var(--ease-resolve),
       background-color var(--dur-press) var(--ease-resolve);
   }
-  .nav__panel-link:hover {
+  :global(.nav__panel-link:hover) {
     color: #fff;
     background: rgba(255, 255, 255, 0.05);
   }
-  .nav__panel-link--muted { color: var(--color-on-navy-faint); }
+  :global(.nav__panel-link--muted) { color: var(--color-on-navy-faint); }
   /* Contact — the one distinct item ("one accent, one job"), set off by a
      hairline above it. */
-  .nav__panel-link--contact {
+  :global(.nav__panel-link--contact) {
     margin-top: var(--space-2);
     padding-top: 0.75rem;
     color: #fff;

@@ -16,7 +16,7 @@
  * NO stats row, NO methodology teaser — deliberate (reference annotation +
  * 3.6 minimal-content decision). A stats row returns only with real figures.
  */
-import { SITE } from '../site.ts';
+import Email from './Email.astro';
 
 interface Props {
   variant: 'imaging' | 'cardiac' | 'facility';
@@ -24,7 +24,6 @@ interface Props {
   cred?: string;
 }
 const { variant, sub, cred } = Astro.props;
-const contactHref = `mailto:${SITE.email}`;
 
 // Amber-cluster positions and captions. Imaging/cardiac are exact reference
 // build-note values; facility follows the same system (a distinct loose
@@ -49,7 +48,7 @@ const dots = Array.from({ length: 40 }, (_, i) => AMBER[variant].includes(i));
         <h1 class="hero__h1"><slot /></h1>
         <p class="hero__sub" set:html={sub} />
         {cred && <p class="hero__cred">{cred}</p>}
-        <a class="hero__cta" href={contactHref}>Get in touch</a>
+        <Email class="hero__cta" label="Get in touch" />
       </div>
 
       <div class="hero__visual" aria-hidden="true">
@@ -105,8 +104,10 @@ const dots = Array.from({ length: 40 }, (_, i) => AMBER[variant].includes(i));
   }
 
   /* CTA — mock spec: deep amber fill + white text (accessible pair), one per
-     section, plain label, no icon. */
-  .hero__cta {
+     section, plain label, no icon. :global because it's rendered by <Email>
+     via set:html, which doesn't receive Astro's scoped-style attribute. */
+  :global(.hero__cta) {
+    display: inline-block;
     background: var(--color-amber-deep);
     color: #fff;
     font-family: var(--font-body);
@@ -120,8 +121,8 @@ const dots = Array.from({ length: 40 }, (_, i) => AMBER[variant].includes(i));
     transition: background-color var(--dur-press) var(--ease-resolve),
       transform var(--dur-press) var(--ease-resolve);
   }
-  .hero__cta:hover { background: #855e0b; } /* a shade darker, stays > AA with white */
-  .hero__cta:active { transform: scale(0.98); } /* press state per 4.2 */
+  :global(.hero__cta:hover) { background: #855e0b; } /* a shade darker, stays > AA with white */
+  :global(.hero__cta:active) { transform: scale(0.98); } /* press state per 4.2 */
 
   .hero__visual {
     position: relative;

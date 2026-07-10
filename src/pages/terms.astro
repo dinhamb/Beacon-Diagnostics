@@ -6,6 +6,7 @@
  * non-excludable Australian Consumer Law rights. Not legal advice.
  */
 import LegalPage from '../layouts/LegalPage.astro';
+import Email from '../components/Email.astro';
 import { SITE } from '../site.ts';
 ---
 
@@ -62,7 +63,7 @@ import { SITE } from '../site.ts';
 
   <h2>Contact</h2>
   <p>
-    Email: <a href={`mailto:${SITE.email}`}>{SITE.email}</a><br />
+    Email: <Email /><br />
     Phone: {SITE.phone} ({SITE.phoneMnemonic})
   </p>
 </LegalPage>
