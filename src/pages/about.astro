@@ -25,6 +25,7 @@ const showLeadership = false;
   title="About"
   description="About Beacon Diagnostics — specialist expertise across cardiac diagnostics, imaging quality assurance and clinical support."
   navVariant="gateway"
+  flushFooter
 >
   <!-- Intro: navy panel, positioning line + founding paragraphs -->
   <section class="about-hero panel-navy">
@@ -105,6 +106,14 @@ const showLeadership = false;
 </Base>
 
 <style>
+  /* The page ends on a navy section: grow it to fill main so no body-colour
+     strip is orphaned above the (flush) footer. :global(main) is safe — this
+     stylesheet only loads on this page. */
+  :global(main) {
+    display: flex;
+    flex-direction: column;
+  }
+
   .about-hero { padding-block: var(--space-9); }
 
   .about-lead {
@@ -141,5 +150,8 @@ const showLeadership = false;
   }
   .about-role + .about-body { margin-top: var(--space-5); }
 
-  .about-collab { padding-block: var(--space-9); }
+  .about-collab {
+    padding-block: var(--space-9);
+    flex: 1; /* last section absorbs any leftover main height (see above) */
+  }
 </style>

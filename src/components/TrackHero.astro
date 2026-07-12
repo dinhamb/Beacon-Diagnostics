@@ -71,8 +71,22 @@ const dots = Array.from({ length: 40 }, (_, i) => AMBER[variant].includes(i));
 </section>
 
 <style>
+  /* Track pages are hero-only (3.6 minimal-content): grow the navy panel to
+     fill main so no body-colour strip is orphaned above the (flush) footer.
+     :global(main) is safe — this stylesheet only loads on hero pages. */
+  :global(main) {
+    display: flex;
+    flex-direction: column;
+  }
+  .hero {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
   /* Inner width tracks the site grid so hero content aligns with the pages. */
   .hero__inner {
+    width: 100%;
     max-width: var(--grid-max);
     margin-inline: auto;
     padding-inline: var(--grid-pad);
@@ -171,11 +185,14 @@ const dots = Array.from({ length: 40 }, (_, i) => AMBER[variant].includes(i));
     opacity: 1;
   }
 
+  /* Narrow screens keep the side-by-side arrangement (owner request —
+     visual beside the paragraph, not under it), just tighter: the visual
+     column narrows and stretches to match the content's height. */
   @media (max-width: 880px) {
     .hero__inner { padding-inline: var(--grid-pad-mobile); }
-    .hero__grid { grid-template-columns: 1fr; min-height: 0; }
-    .hero__content { padding: 40px 0; }
-    .hero__visual { height: 240px; margin-bottom: 40px; }
+    .hero__grid { grid-template-columns: 1.15fr 0.85fr; min-height: 0; }
+    .hero__content { padding: 32px 20px 32px 0; }
+    .hero__visual { min-height: 220px; }
   }
 </style>
 

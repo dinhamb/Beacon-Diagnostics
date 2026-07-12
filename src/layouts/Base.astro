@@ -15,12 +15,16 @@ interface Props {
   description: string;
   navVariant?: 'gateway' | 'service';
   activeTrack?: TrackId;
+  /** For pages whose last section is already navy — joins the footer to it
+      without the body-colour gap. */
+  flushFooter?: boolean;
 }
 const {
   title,
   description,
   navVariant = 'gateway',
   activeTrack,
+  flushFooter = false,
 } = Astro.props;
 const fullTitle = title.includes(SITE.name) ? title : `${title} — ${SITE.name}`;
 
@@ -88,7 +92,7 @@ const fontFaceCss = `
     <main id="main">
       <slot />
     </main>
-    <Footer />
+    <Footer flush={flushFooter} />
 
     <script>
       // Shared reveal-on-scroll observer (Layer 4.2). Progressive enhancement:
