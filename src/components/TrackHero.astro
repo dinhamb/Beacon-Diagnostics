@@ -25,18 +25,13 @@ interface Props {
 }
 const { variant, sub, cred } = Astro.props;
 
-// Amber-cluster positions and captions. Imaging/cardiac are exact reference
-// build-note values; facility follows the same system (a distinct loose
-// cluster per track) — a compact block, reading as a footprint/floor plan.
+// Amber-cluster positions. Imaging/cardiac are exact reference build-note
+// values; facility follows the same system (a distinct loose cluster per
+// track) — a compact block, reading as a footprint/floor plan.
 const AMBER: Record<Props['variant'], number[]> = {
   imaging: [12, 13, 21, 22, 29, 30], // loose diagonal cluster
   cardiac: [3, 11, 19, 20, 28], // upper-right-leaning cluster
   facility: [18, 19, 26, 27, 35], // compact block cluster
-};
-const CAPTION: Record<Props['variant'], string> = {
-  imaging: 'signal, resolved',
-  cardiac: 'clarity, resolved',
-  facility: 'design, resolved',
 };
 const dots = Array.from({ length: 40 }, (_, i) => AMBER[variant].includes(i));
 ---
@@ -55,7 +50,6 @@ const dots = Array.from({ length: 40 }, (_, i) => AMBER[variant].includes(i));
         <div class="hero__dotgrid">
           {dots.map((on) => <div class={on ? 'dot dot--on' : 'dot'} />)}
         </div>
-        <div class="hero__caption">{CAPTION[variant]}</div>
       </div>
     </div>
   </div>
@@ -152,14 +146,6 @@ const dots = Array.from({ length: 40 }, (_, i) => AMBER[variant].includes(i));
   .dot--on {
     background: var(--color-amber);
     opacity: 1;
-  }
-  .hero__caption {
-    position: absolute;
-    bottom: 16px;
-    left: 20px;
-    font-family: var(--font-body);
-    font-size: 10px;
-    color: var(--color-on-navy-soft);
   }
 
   @media (max-width: 880px) {
