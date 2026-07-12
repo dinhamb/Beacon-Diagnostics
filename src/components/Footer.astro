@@ -21,11 +21,18 @@
 import Logo from './Logo.astro';
 import Email from './Email.astro';
 import { SITE, TRACKS, TRACK_ORDER, withBase } from '../site.ts';
+
+interface Props {
+  /** Drop the top margin — for pages whose last section is already navy,
+      so the footer joins it without an orphaned body-colour strip. */
+  flush?: boolean;
+}
+const { flush = false } = Astro.props;
 const year = new Date().getFullYear();
 const telHref = `tel:${SITE.phone.replace(/\s/g, '')}`;
 ---
 
-<footer class="footer" id="contact">
+<footer class:list={['footer', { 'footer--flush': flush }]} id="contact">
   <div class="footer__inner">
     <div class="footer__grid">
       <!-- 1. logo only (3.4) -->
@@ -89,6 +96,7 @@ const telHref = `tel:${SITE.phone.replace(/\s/g, '')}`;
     background: var(--color-navy);
     margin-top: var(--space-9);
   }
+  .footer--flush { margin-top: 0; }
   /* Inner width tracks the site grid so footer content aligns with the pages. */
   .footer__inner {
     max-width: var(--grid-max);

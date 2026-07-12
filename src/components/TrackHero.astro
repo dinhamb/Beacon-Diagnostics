@@ -171,11 +171,14 @@ const dots = Array.from({ length: 40 }, (_, i) => AMBER[variant].includes(i));
     opacity: 1;
   }
 
+  /* Narrow screens keep the side-by-side arrangement (owner request —
+     visual beside the paragraph, not under it), just tighter: the visual
+     column narrows and stretches to match the content's height. */
   @media (max-width: 880px) {
     .hero__inner { padding-inline: var(--grid-pad-mobile); }
-    .hero__grid { grid-template-columns: 1fr; min-height: 0; }
-    .hero__content { padding: 40px 0; }
-    .hero__visual { height: 240px; margin-bottom: 40px; }
+    .hero__grid { grid-template-columns: 1.15fr 0.85fr; min-height: 0; }
+    .hero__content { padding: 32px 20px 32px 0; }
+    .hero__visual { min-height: 220px; }
   }
 </style>
 

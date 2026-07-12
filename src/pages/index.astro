@@ -18,6 +18,7 @@ import { TRACKS, TRACK_ORDER } from '../site.ts';
   title="Beacon Diagnostics"
   description="Beacon Diagnostics — Imaging Support Services, Cardiac Services and Facility Design Consulting."
   navVariant="gateway"
+  flushFooter
 >
   <!-- Hero + routing: one navy panel continuing from the nav.
        Headline centered/symmetric (3.1); three tracks, equal 4/4/4. -->
@@ -38,7 +39,20 @@ import { TRACKS, TRACK_ORDER } from '../site.ts';
 </Base>
 
 <style>
-  .gateway-route { padding-block: var(--space-9); }
+  /* The gateway is this page's only section: grow it to fill main so no
+     body-colour strip is orphaned between it and the (flush) footer.
+     :global(main) is safe — this stylesheet only loads on this page. */
+  :global(main) {
+    display: flex;
+    flex-direction: column;
+  }
+  .gateway-route {
+    padding-block: var(--space-9);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
   .gateway-route__head {
     text-align: center;
     margin-bottom: var(--space-8);
