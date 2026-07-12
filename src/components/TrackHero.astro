@@ -71,8 +71,22 @@ const dots = Array.from({ length: 40 }, (_, i) => AMBER[variant].includes(i));
 </section>
 
 <style>
+  /* Track pages are hero-only (3.6 minimal-content): grow the navy panel to
+     fill main so no body-colour strip is orphaned above the (flush) footer.
+     :global(main) is safe — this stylesheet only loads on hero pages. */
+  :global(main) {
+    display: flex;
+    flex-direction: column;
+  }
+  .hero {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
   /* Inner width tracks the site grid so hero content aligns with the pages. */
   .hero__inner {
+    width: 100%;
     max-width: var(--grid-max);
     margin-inline: auto;
     padding-inline: var(--grid-pad);
