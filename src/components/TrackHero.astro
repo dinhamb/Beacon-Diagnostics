@@ -7,11 +7,17 @@
  * · sub → CTA gap 16px · cred line 12px #5F8AC2 with 24px below · visual side
  * on the deep panel (#082038).
  *
- * Visual: the static dot-field motif (reference "Candidate C") — 8×5 grid,
- * 6px dots, 18px gap, slate at 50% opacity with a fixed amber cluster per
- * track. Rendered at build time: NO JavaScript, no scroll trigger, no
- * animation, per the reference build note (that fragility is what broke the
- * original locking-grid motif).
+ * Visual: interactive dot-field canvas (owner request, 2026-07-12) — dots
+ * start as a random scatter and RESOLVE into a track-specific shape on hover
+ * (lighthouse / heart / floor plan), scattering again on leave. Touch devices
+ * have no hover, so there the dots resolve when the hero is in view and
+ * scatter when it leaves. Shape targets are not hand-placed: each shape is
+ * painted once onto an offscreen canvas and sampled via getImageData().
+ *
+ * NOTE: this diverges from the reference build note for this motif (static
+ * dots, no JS) at the owner's explicit request. Degradation ladder:
+ *   - prefers-reduced-motion: the resolved shape drawn once, no animation
+ *   - JS off: <noscript> static dot grid (the previous motif, unchanged)
  *
  * NO stats row, NO methodology teaser — deliberate (reference annotation +
  * 3.6 minimal-content decision). A stats row returns only with real figures.
@@ -25,9 +31,15 @@ interface Props {
 }
 const { variant, sub, cred } = Astro.props;
 
-// Amber-cluster positions. Imaging/cardiac are exact reference build-note
-// values; facility follows the same system (a distinct loose cluster per
-// track) — a compact block, reading as a footprint/floor plan.
+// Canvas shape per track — sampled at runtime, see the <script> below.
+const SHAPE: Record<Props['variant'], string> = {
+  imaging: 'lighthouse',
+  cardiac: 'heart',
+  facility: 'floorplan',
+};
+
+// Static no-JS fallback: the previous motif's exact amber-cluster positions
+// (imaging/cardiac from the reference build note; facility follows the system).
 const AMBER: Record<Props['variant'], number[]> = {
   imaging: [12, 13, 21, 22, 29, 30], // loose diagonal cluster
   cardiac: [3, 11, 19, 20, 28], // upper-right-leaning cluster
@@ -47,9 +59,12 @@ const dots = Array.from({ length: 40 }, (_, i) => AMBER[variant].includes(i));
       </div>
 
       <div class="hero__visual" aria-hidden="true">
-        <div class="hero__dotgrid">
-          {dots.map((on) => <div class={on ? 'dot dot--on' : 'dot'} />)}
-        </div>
+        <canvas class="hero__dots" data-dots data-shape={SHAPE[variant]}></canvas>
+        <noscript>
+          <div class="hero__dotgrid">
+            {dots.map((on) => <div class={on ? 'dot dot--on' : 'dot'} />)}
+          </div>
+        </noscript>
       </div>
     </div>
   </div>
@@ -122,7 +137,15 @@ const dots = Array.from({ length: 40 }, (_, i) => AMBER[variant].includes(i));
     position: relative;
     background: var(--color-navy-deep);
   }
-  /* Static dot field — exact reference values (.dotgrid/.dot/.visual-caption) */
+  .hero__dots {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* Static no-JS fallback — the previous motif's exact values, kept verbatim. */
   .hero__dotgrid {
     display: grid;
     grid-template-columns: repeat(8, 1fr);
@@ -155,3 +178,220 @@ const dots = Array.from({ length: 40 }, (_, i) => AMBER[variant].includes(i));
     .hero__visual { height: 240px; margin-bottom: 40px; }
   }
 </style>
+
+<script>
+  // Interactive dot field: scatter <-> shape (see component header for the
+  // behavior contract). Shape targets come from painting each shape once on
+  // an offscreen 600x600 canvas and sampling filled pixels on a STRIDE grid,
+  // so nothing is hand-placed. Per-particle exponential easing toward the
+  // current state means mid-animation reversals (quick hover in/out) stay
+  // smooth in both directions.
+  const AMBER_RGB = '212,160,23'; // --color-amber
+  const PALE_RGB = '181,212,244'; // --color-on-navy (a few contrast dots)
+  const GRID = 600; // shape painters' coordinate space
+  const STRIDE = 7; // px between sampled target points (lower = denser)
+  const MAX_POINTS = 1100; // hard cap for performance
+  const FIT = 0.82; // shape size relative to the panel's short side
+
+  type Painter = (ctx: CanvasRenderingContext2D) => void;
+
+  const SHAPES: Record<string, Painter> = {
+    lighthouse(ctx) {
+      // beam fan (two wedges from the lantern)
+      ctx.beginPath();
+      ctx.moveTo(315, 170); ctx.lineTo(560, 90); ctx.lineTo(560, 150); ctx.closePath();
+      ctx.moveTo(315, 185); ctx.lineTo(560, 235); ctx.lineTo(560, 295); ctx.closePath();
+      ctx.fill();
+      // lantern room
+      ctx.fillRect(268, 140, 70, 55);
+      // roof
+      ctx.beginPath(); ctx.moveTo(258, 140); ctx.lineTo(303, 100); ctx.lineTo(348, 140);
+      ctx.closePath(); ctx.fill();
+      // gallery rail
+      ctx.fillRect(252, 195, 102, 14);
+      // tapered tower
+      ctx.beginPath();
+      ctx.moveTo(272, 209); ctx.lineTo(334, 209);
+      ctx.lineTo(372, 505); ctx.lineTo(234, 505); ctx.closePath(); ctx.fill();
+      // base
+      ctx.fillRect(206, 505, 194, 26);
+    },
+    heart(ctx) {
+      ctx.beginPath();
+      ctx.moveTo(300, 510);
+      ctx.bezierCurveTo(150, 390, 70, 300, 70, 205);
+      ctx.bezierCurveTo(70, 115, 145, 75, 210, 75);
+      ctx.bezierCurveTo(255, 75, 290, 100, 300, 140);
+      ctx.bezierCurveTo(310, 100, 345, 75, 390, 75);
+      ctx.bezierCurveTo(455, 75, 530, 115, 530, 205);
+      ctx.bezierCurveTo(530, 300, 450, 390, 300, 510);
+      ctx.closePath(); ctx.fill();
+    },
+    floorplan(ctx) {
+      ctx.lineWidth = 13; ctx.lineCap = 'butt';
+      // outer footprint with a main-entry gap on the south wall
+      ctx.beginPath();
+      ctx.moveTo(255, 520); ctx.lineTo(90, 520); ctx.lineTo(90, 110);
+      ctx.lineTo(510, 110); ctx.lineTo(510, 520); ctx.lineTo(345, 520);
+      ctx.stroke();
+      // internal wall, vertical, with door gap
+      ctx.beginPath(); ctx.moveTo(300, 110); ctx.lineTo(300, 250); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(300, 320); ctx.lineTo(300, 400); ctx.stroke();
+      // internal wall, horizontal, with door gap
+      ctx.beginPath(); ctx.moveTo(90, 400); ctx.lineTo(200, 400); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(270, 400); ctx.lineTo(510, 400); ctx.stroke();
+      // patient-flow line: entry -> room 1 -> through doors -> room 2
+      ctx.lineWidth = 9;
+      ctx.beginPath();
+      ctx.moveTo(300, 545);
+      ctx.quadraticCurveTo(300, 470, 235, 455);
+      ctx.quadraticCurveTo(150, 435, 150, 330);
+      ctx.quadraticCurveTo(150, 255, 235, 255);
+      ctx.quadraticCurveTo(330, 255, 385, 255);
+      ctx.stroke();
+      // destination marker
+      ctx.beginPath(); ctx.arc(408, 255, 17, 0, Math.PI * 2); ctx.fill();
+    },
+  };
+
+  function sampleShape(paint: Painter): number[][] {
+    const off = document.createElement('canvas');
+    off.width = off.height = GRID;
+    const ctx = off.getContext('2d', { willReadFrequently: true })!;
+    ctx.fillStyle = ctx.strokeStyle = '#fff';
+    paint(ctx);
+    const data = ctx.getImageData(0, 0, GRID, GRID).data;
+    const pts: number[][] = [];
+    for (let y = 0; y < GRID; y += STRIDE) {
+      for (let x = 0; x < GRID; x += STRIDE) {
+        if (data[(y * GRID + x) * 4 + 3] > 128) {
+          // small jitter so the grid doesn't look mechanical
+          pts.push([x + (Math.random() - 0.5) * 3, y + (Math.random() - 0.5) * 3]);
+        }
+      }
+    }
+    while (pts.length > MAX_POINTS) pts.splice(Math.floor(Math.random() * pts.length), 1);
+    return pts;
+  }
+
+  interface Particle {
+    sx: number; sy: number; // scatter position
+    tx: number; ty: number; // shape target
+    k: number; // 0 = at scatter, 1 = at shape
+    rate: number; // per-particle easing speed (varies -> organic stagger)
+    r: number;
+    phase: number;
+    pale: boolean;
+  }
+
+  function initCanvas(canvas: HTMLCanvasElement) {
+    if ((canvas as any).__dots) return; // idempotent across astro:page-load
+    (canvas as any).__dots = true;
+
+    const paint = SHAPES[canvas.dataset.shape || ''];
+    const ctx = canvas.getContext('2d');
+    if (!paint || !ctx) return;
+
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const canHover = matchMedia('(hover: hover)').matches;
+    const dpr = Math.min(devicePixelRatio || 1, 2);
+
+    let W = 0;
+    let H = 0;
+    let raf = 0;
+    let particles: Particle[] = [];
+    let target = reduced ? 1 : 0; // which end state the dots ease toward
+
+    function build() {
+      const rect = canvas.getBoundingClientRect();
+      W = rect.width;
+      H = rect.height;
+      canvas.width = W * dpr;
+      canvas.height = H * dpr;
+      ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const scale = (Math.min(W, H) * FIT) / GRID;
+      const ox = (W - GRID * scale) / 2;
+      const oy = (H - GRID * scale) / 2;
+      particles = sampleShape(paint).map(([x, y]) => ({
+        sx: Math.random() * W,
+        sy: Math.random() * H,
+        tx: x * scale + ox,
+        ty: y * scale + oy,
+        k: target, // (re)builds jump straight to the current state
+        rate: 0.035 + Math.random() * 0.05,
+        r: 1.2 + Math.random() * 1.6,
+        phase: Math.random() * Math.PI * 2,
+        pale: Math.random() < 0.06,
+      }));
+    }
+
+    function drawFrame(now: number, drift: boolean) {
+      ctx!.clearRect(0, 0, W, H);
+      for (const p of particles) {
+        p.k += (target - p.k) * p.rate;
+        const x = p.sx + (p.tx - p.sx) * p.k;
+        const y = p.sy + (p.ty - p.sy) * p.k;
+        const a = 0.35 + 0.55 * p.k;
+        // gentle idle breathing
+        const d = drift ? Math.sin(now / 1400 + p.phase) * 1.1 : 0;
+        ctx!.beginPath();
+        ctx!.arc(x + d, y - d, p.r, 0, Math.PI * 2);
+        ctx!.fillStyle = `rgba(${p.pale ? PALE_RGB : AMBER_RGB},${a})`;
+        ctx!.fill();
+      }
+    }
+
+    build();
+
+    if (reduced) {
+      // resolved shape, drawn once, no animation
+      drawFrame(0, false);
+      return;
+    }
+
+    const onResize = () => {
+      if (!canvas.isConnected) {
+        removeEventListener('resize', onResize);
+        return;
+      }
+      build();
+    };
+
+    function loop(now: number) {
+      if (!canvas.isConnected) {
+        // view transitions swapped the DOM — stop this instance for good
+        cancelAnimationFrame(raf);
+        removeEventListener('resize', onResize);
+        return;
+      }
+      drawFrame(now, true);
+      raf = requestAnimationFrame(loop);
+    }
+
+    const panel = canvas.closest('.hero__visual') || canvas;
+    if (canHover) {
+      panel.addEventListener('pointerenter', () => { target = 1; });
+      panel.addEventListener('pointerleave', () => { target = 0; });
+    } else {
+      // no hover (touch): resolve in view, scatter out of view
+      new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) target = e.isIntersecting ? 1 : 0;
+        },
+        { threshold: 0.4 },
+      ).observe(canvas);
+    }
+
+    addEventListener('resize', onResize, { passive: true });
+    raf = requestAnimationFrame(loop);
+  }
+
+  function initAllDots() {
+    document
+      .querySelectorAll<HTMLCanvasElement>('canvas[data-dots]')
+      .forEach(initCanvas);
+  }
+
+  initAllDots();
+  document.addEventListener('astro:page-load', initAllDots);
+</script>
