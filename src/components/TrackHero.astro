@@ -10,9 +10,12 @@
  * Visual: interactive dot-field canvas (owner request, 2026-07-12) — dots
  * start as a random scatter and RESOLVE into a track-specific shape on hover
  * (lighthouse / heart / floor plan), scattering again on leave. Touch devices
- * have no hover, so there the dots resolve when the hero is in view and
- * scatter when it leaves. Shape targets are not hand-placed: each shape is
- * painted once onto an offscreen canvas and sampled via getImageData().
+ * have no reliable hover, so there the dots auto-cycle instead (owner
+ * fallback, 2026-07-13, after mobile browsers proved inconsistent about
+ * exposing hover/motion-preference signals): scatter, pause, resolve, hold,
+ * scatter again, on a timed loop while the hero is in view. Shape targets
+ * are not hand-placed: each shape is painted once onto an offscreen canvas
+ * and sampled via getImageData().
  *
  * NOTE: this diverges from the reference build note for this motif (static
  * dots, no JS) at the owner's explicit request. Degradation ladder:
@@ -316,6 +319,7 @@ const dots = Array.from({ length: 40 }, (_, i) => AMBER[variant].includes(i));
     let W = 0;
     let H = 0;
     let raf = 0;
+    let cycleTimer = 0;
     let particles: Particle[] = [];
     let target = reduced ? 1 : 0; // which end state the dots ease toward
 
@@ -379,6 +383,7 @@ const dots = Array.from({ length: 40 }, (_, i) => AMBER[variant].includes(i));
         // view transitions swapped the DOM — stop this instance for good
         cancelAnimationFrame(raf);
         removeEventListener('resize', onResize);
+        clearTimeout(cycleTimer);
         return;
       }
       drawFrame(now, true);
@@ -390,10 +395,30 @@ const dots = Array.from({ length: 40 }, (_, i) => AMBER[variant].includes(i));
       panel.addEventListener('pointerenter', () => { target = 1; });
       panel.addEventListener('pointerleave', () => { target = 0; });
     } else {
-      // no hover (touch): resolve in view, scatter out of view
+      // No reliable hover (touch): auto-cycle scatter -> resolve -> scatter
+      // on a timer while in view, rather than a single hover-shaped trigger —
+      // sidesteps mobile browsers disagreeing on hover/reduced-motion signals.
+      const SCATTER_HOLD = 2600; // ms scattered before resolving
+      const RESOLVE_HOLD = 2400; // ms resolved before scattering again
+
+      function scheduleNext(resolving: boolean) {
+        clearTimeout(cycleTimer);
+        cycleTimer = window.setTimeout(() => {
+          target = resolving ? 1 : 0;
+          scheduleNext(!resolving);
+        }, resolving ? SCATTER_HOLD : RESOLVE_HOLD);
+      }
+
       new IntersectionObserver(
         (entries) => {
-          for (const e of entries) target = e.isIntersecting ? 1 : 0;
+          for (const e of entries) {
+            if (e.isIntersecting) {
+              target = 0; // always re-enter on a fresh scatter
+              scheduleNext(true);
+            } else {
+              clearTimeout(cycleTimer);
+            }
+          }
         },
         { threshold: 0.4 },
       ).observe(canvas);
