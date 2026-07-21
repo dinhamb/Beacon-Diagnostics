@@ -1,5 +1,6 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import sitemap from '@astrojs/sitemap';
 
 // Static output, islands by default. Editorial content ships ~zero JS;
 // only the motion <script> blocks hydrate per-route (Brand Foundations 4.4).
@@ -18,4 +19,7 @@ export default defineConfig({
     prefetchAll: true,
     defaultStrategy: 'viewport',
   },
+  // Generates sitemap-index.xml + sitemap-0.xml from the actual page routes
+  // at build time (for Google Search Console).
+  integrations: [sitemap()],
 });
